@@ -195,10 +195,8 @@ public class Controller {
         mediaPlayer.setVolume(sliderMasterVolume.getValue() / 100.0);
 
         sliderMasterVolume.valueProperty().addListener(observable -> {
-            if (sliderMasterVolume.isValueChanging()) {
                 if (mediaPlayer != null) {
                     mediaPlayer.setVolume(sliderMasterVolume.getValue() / 100.0);
-                }
                 writeProperties();
             }
         });
