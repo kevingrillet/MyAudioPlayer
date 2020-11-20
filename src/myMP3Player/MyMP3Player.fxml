@@ -58,9 +58,9 @@
                </bottom>
                <top>
                   <HBox alignment="CENTER" prefHeight="29.0" prefWidth="579.0" BorderPane.alignment="CENTER">
-                     <Button id="buttonPlayerStop" mnemonicParsing="false" onAction="#handleButtonAction" text="Stop" />
-                     <Button id="buttonPlayerPlay" mnemonicParsing="false" onAction="#handleButtonAction" text="Play" />
-                     <Button id="buttonPlayerPause" mnemonicParsing="false" onAction="#handleButtonAction" text="Pause" />
+                     <Button id="buttonPlayerStop" mnemonicParsing="false" onAction="#handleButtonAction" text="⏹" />
+                     <Button id="buttonPlayerPlay" mnemonicParsing="false" onAction="#handleButtonAction" text="▶" />
+                     <Button id="buttonPlayerPause" mnemonicParsing="false" onAction="#handleButtonAction" text="⏸" />
                   </HBox>
                </top>
             </BorderPane>
@@ -72,8 +72,8 @@
          <BorderPane prefHeight="200.0" prefWidth="200.0">
             <bottom>
                <HBox BorderPane.alignment="CENTER">
-                  <Button id="buttonPlaylistAdd" mnemonicParsing="false" onAction="#handleButtonAction" text="Add" />
-                  <Button id="buttonPlaylistRemove" mnemonicParsing="false" onAction="#handleButtonAction" text="Remove" />
+                  <Button id="buttonPlaylistAdd" mnemonicParsing="false" onAction="#handleButtonAction" text="+" />
+                  <Button id="buttonPlaylistRemove" mnemonicParsing="false" onAction="#handleButtonAction" text="-" />
                </HBox>
             </bottom>
             <center>

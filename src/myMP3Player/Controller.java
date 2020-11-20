@@ -19,6 +19,7 @@ import javax.sound.sampled.*;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -27,6 +28,7 @@ import java.util.Properties;
  */
 public class Controller {
     private Duration duration;
+    private List<String> listPath;
     private MediaPlayer mediaPlayer;
     private Path path;
 
@@ -90,23 +92,25 @@ public class Controller {
                         path = Paths.get(file.toURI());
                         path = path.getParent();
 
-                        listViewPlaylist.getItems().add(file.toString());
+                        listPath.add(file.toString());
+                        listViewPlaylist.getItems().add(file.getName());
 //                        setMedia(file);
                         writeProperties();
                     }
                 }
-                setMedia(new File(listViewPlaylist.getItems().get(0)));
+                setMedia(new File(listPath.get(0)));
                 break;
             case "buttonPlaylistRemove":
                 if (listViewPlaylist.getSelectionModel().getSelectedIndex()>=0){
                     if (listViewPlaylist.getSelectionModel().getSelectedIndex() == 0) {
                         if (!(mediaPlayer == null)) {
                             mediaPlayer.stop();
-                            if (listViewPlaylist.getItems().size()>0) {
-                                setMedia(new File(listViewPlaylist.getItems().get(1)));
+                            if (listViewPlaylist.getItems().size() > 1) {
+                                setMedia(new File(listPath.get(1)));
                             }
                         }
                     }
+                    listPath.remove(listViewPlaylist.getSelectionModel().getSelectedIndex());
                     listViewPlaylist.getItems().remove(listViewPlaylist.getSelectionModel().getSelectedIndex());
                 }
                 break;
@@ -121,7 +125,22 @@ public class Controller {
     void handleComboAction(ActionEvent event) {
         String id = ((Node) event.getSource()).getId();
         if ("comboAudioOutput".equals(id)) {
-            // TODO: 20/11/2020 MediaPlayer + AudioOutput 
+            // WIP: 20/11/2020 AudioOutput + MediaPlayer
+//            Mixer.Info[] mixerInfo =  AudioSystem.getMixerInfo();
+//            for (Mixer.Info info : mixerInfo) {
+//                if (info.getName().equals(comboAudioOutput.getSelectionModel().getSelectedItem())) {
+//                    try {
+//                        Clip clip = AudioSystem.getClip(AudioSystem.getMixer(info).getMixerInfo());
+//                        AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File(listViewPlaylist.getItems().get(0)));
+//                        clip.open(inputStream);
+//                        clip.start();
+//                    } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    break;
+//                }
+//            }
+
             writeProperties();
         }
     }
@@ -137,6 +156,8 @@ public class Controller {
         assert listViewPlaylist != null : "fx:id=\"listViewPlaylist\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
         assert sliderMasterVolume != null : "fx:id=\"sliderMasterVolume\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
         assert sliderPlayerTime != null : "fx:id=\"sliderPlayerTime\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
+
+        listPath = new ArrayList<>();
 
         /*______ AUDIO OUTPUT ______*/
         // How to get list of AudioOutput.
@@ -154,7 +175,6 @@ public class Controller {
                 listAudioOutput.add(info.getName());
             }
         }
-
         comboAudioOutput.setItems(listAudioOutput);
 
         // Play: https://stackoverflow.com/questions/37609430/play-sound-on-specific-sound-device-java
@@ -214,7 +234,16 @@ public class Controller {
             duration = mediaPlayer.getMedia().getDuration();
             updateTimeValue();
         });
-        mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.stop());
+        mediaPlayer.setOnEndOfMedia(() -> {
+            mediaPlayer.stop();
+            mediaPlayer.seek(new Duration(0));
+            listPath.remove(0);
+            listViewPlaylist.getItems().remove(0);
+            if (listViewPlaylist.getItems().size() > 0) {
+                setMedia(new File(listPath.get(0)));
+                mediaPlayer.play();
+            }
+        });
         /*______ MEDIA PLAYER ______*/
 
         /*______ MASTER LEVEL ______*/
