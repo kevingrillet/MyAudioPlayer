@@ -102,7 +102,7 @@ public class Controller {
                     if (listViewPlaylist.getSelectionModel().getSelectedIndex() == 0) {
                         if (!(mediaPlayer == null)) {
                             mediaPlayer.stop();
-                            if (listViewPlaylist.getItems().size()>0) {
+                            if (listViewPlaylist.getItems().size() > 0) {
                                 setMedia(new File(listViewPlaylist.getItems().get(1)));
                             }
                         }
@@ -121,7 +121,7 @@ public class Controller {
     void handleComboAction(ActionEvent event) {
         String id = ((Node) event.getSource()).getId();
         if ("comboAudioOutput".equals(id)) {
-            // TODO: 20/11/2020 MediaPlayer + AudioOutput 
+            // TODO: 20/11/2020 MediaPlayer + AudioOutput
             writeProperties();
         }
     }
@@ -214,7 +214,15 @@ public class Controller {
             duration = mediaPlayer.getMedia().getDuration();
             updateTimeValue();
         });
-        mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.stop());
+        mediaPlayer.setOnEndOfMedia(() -> {
+            mediaPlayer.stop();
+            mediaPlayer.seek(new Duration(0));
+            listViewPlaylist.getItems().remove(0);
+            if (listViewPlaylist.getItems().size() > 0) {
+                setMedia(new File(listViewPlaylist.getItems().get(0)));
+                mediaPlayer.play();
+            }
+        });
         /*______ MEDIA PLAYER ______*/
 
         /*______ MASTER LEVEL ______*/
