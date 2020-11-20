@@ -25,12 +25,12 @@
                </left>
                <right>
                   <HBox BorderPane.alignment="CENTER">
-                        <Label text="Master volume">
-                           <padding>
-                              <Insets left="10.0" right="10.0" />
-                           </padding>
-                        </Label>
-                        <Slider id="sliderMasterVolume" fx:id="sliderMasterVolume" max="1.0" />
+                     <Label text="Master volume">
+                        <padding>
+                           <Insets left="10.0" right="10.0" />
+                        </padding>
+                     </Label>
+                     <Slider id="sliderMasterVolume" fx:id="sliderMasterVolume" max="1.0" />
                   </HBox>
                </right>
                <center>
@@ -58,9 +58,9 @@
                </bottom>
                <top>
                   <HBox alignment="CENTER" prefHeight="29.0" prefWidth="579.0" BorderPane.alignment="CENTER">
-                     <Button id="buttonPlayerStop" mnemonicParsing="false" text="Stop" />
-                     <Button id="buttonPlayerPlay" mnemonicParsing="false" text="Play" />
-                     <Button id="buttonPlayerPause" mnemonicParsing="false" text="Pause" />
+                     <Button id="buttonPlayerStop" mnemonicParsing="false" onAction="#handleButtonAction" text="Stop" />
+                     <Button id="buttonPlayerPlay" mnemonicParsing="false" onAction="#handleButtonAction" text="Play" />
+                     <Button id="buttonPlayerPause" mnemonicParsing="false" onAction="#handleButtonAction" text="Pause" />
                   </HBox>
                </top>
             </BorderPane>
@@ -72,8 +72,8 @@
          <BorderPane prefHeight="200.0" prefWidth="200.0">
             <bottom>
                <HBox BorderPane.alignment="CENTER">
-                  <Button id="buttonPlaylistAdd" mnemonicParsing="false" text="Add" />
-                  <Button id="buttonPlaylistRemove" mnemonicParsing="false" text="Remove" />
+                  <Button id="buttonPlaylistAdd" mnemonicParsing="false" onAction="#handleButtonAction" text="Add" />
+                  <Button id="buttonPlaylistRemove" mnemonicParsing="false" onAction="#handleButtonAction" text="Remove" />
                </HBox>
             </bottom>
             <center>

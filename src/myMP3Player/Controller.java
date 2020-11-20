@@ -2,26 +2,47 @@ package myMP3Player;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 
 import javax.sound.sampled.*;
 
 public class Controller {
-    @FXML
-    private ComboBox<String> comboAudioOutput ;
+
+    @FXML // fx:id="sliderMasterVolume"
+    private Slider sliderMasterVolume; // Value injected by FXMLLoader
+
+    @FXML // fx:id="comboAudioOutput"
+    private ComboBox<String> comboAudioOutput; // Value injected by FXMLLoader
 
     @FXML
-    private Slider sliderMasterVolume;
+    void handleButtonAction(ActionEvent event) {
+        String id = ((Node) event.getSource()).getId();
+        switch (id) {
+            case "buttonPlayerStop":
+                break;
+            case "buttonPlayerPause":
+                break;
+            case "buttonPlayerPlay":
+                break;
+            case "buttonPlaylistAdd":
+                break;
+            case "buttonPlaylistRemove":
+                break;
+            default:
+                break;
+        }
+    }
 
-    public void initialize() {
+    @FXML // This method is called by the FXMLLoader when initialization is complete
+    void initialize() {
+        assert sliderMasterVolume != null : "fx:id=\"sliderMasterVolume\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
+        assert comboAudioOutput != null : "fx:id=\"comboAudioOutput\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
         // Basics
         // https://docs.oracle.com/javafx/2/media/playercontrol.htm
-
-
-
-
 
         /*______ AUDIO OUTPUT ______*/
         // How to get list of AudioOutput.
