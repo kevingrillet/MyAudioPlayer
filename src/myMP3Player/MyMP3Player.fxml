@@ -77,7 +77,7 @@
                </HBox>
             </bottom>
             <center>
-               <ListView id="listViewPlaylist" BorderPane.alignment="CENTER" />
+               <ListView id="listViewPlaylist" fx:id="listViewPlaylist" BorderPane.alignment="CENTER" />
             </center>
          </BorderPane>
       </TitledPane>

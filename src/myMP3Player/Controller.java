@@ -8,6 +8,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -18,6 +19,7 @@ import javax.sound.sampled.*;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -37,6 +39,9 @@ public class Controller {
     @FXML // fx:id="labelPlayerTime"
     private Label labelPlayerTime; // Value injected by FXMLLoader
 
+    @FXML // fx:id="listViewPlaylist"
+    private ListView<String> listViewPlaylist; // Value injected by FXMLLoader
+
     @FXML // fx:id="sliderMasterVolume"
     private Slider sliderMasterVolume; // Value injected by FXMLLoader
 
@@ -52,39 +57,59 @@ public class Controller {
         String id = ((Node) event.getSource()).getId();
         switch (id) {
             case "buttonPlayerStop":
-                if ( mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-                    mediaPlayer.stop();
-                    mediaPlayer.seek(mediaPlayer.getStartTime());
+                if (!(mediaPlayer == null)) {
+                    if ( mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                        mediaPlayer.stop();
+                        mediaPlayer.seek(mediaPlayer.getStartTime());
+                    }
                 }
                 break;
             case "buttonPlayerPause":
-                if ( mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-                    mediaPlayer.pause();
-                }
+                if (!(mediaPlayer == null)) {
+                    if ( mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                        mediaPlayer.pause();
+                    }}
                 break;
             case "buttonPlayerPlay":
-                if ( mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED
-                        || mediaPlayer.getStatus() == MediaPlayer.Status.READY
-                        || mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
-                    mediaPlayer.play();
-                }
+                if (!(mediaPlayer == null)) {
+                    if ( mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED
+                            || mediaPlayer.getStatus() == MediaPlayer.Status.READY
+                            || mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
+                        mediaPlayer.play();
+                    }}
                 break;
             case "buttonPlaylistAdd":
                 FileChooser fileChooser = new FileChooser();
+//                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("*.mp3"));
                 if (!path.toString().isEmpty()) {
                     fileChooser.setInitialDirectory(new File(path.toString()));
                 }
-                File file = fileChooser.showOpenDialog(null);
-                if (file != null) {
-                    path = Paths.get(file.toURI());
-                    path = path.getParent();
+                List<File> fileList = fileChooser.showOpenMultipleDialog(null);
+                for (File file : fileList){
+                    if (file != null) {
+                        path = Paths.get(file.toURI());
+                        path = path.getParent();
 
-                    setMedia(file);
-                    writeProperties();
+                        listViewPlaylist.getItems().add(file.toString());
+//                        setMedia(file);
+                        writeProperties();
+                    }
                 }
+                setMedia(new File(listViewPlaylist.getItems().get(0)));
                 break;
             case "buttonPlaylistRemove":
-                mediaPlayer.dispose();
+                if (listViewPlaylist.getSelectionModel().getSelectedIndex()>=0){
+                    if (listViewPlaylist.getSelectionModel().getSelectedIndex() == 0) {
+                        if (!(mediaPlayer == null)) {
+                            if (listViewPlaylist.getItems().size()>0) {
+                                setMedia(new File(listViewPlaylist.getItems().get(1)));
+                            } else {
+                                mediaPlayer.stop();
+                            }
+                        }
+                    }
+                    listViewPlaylist.getItems().remove(listViewPlaylist.getSelectionModel().getSelectedIndex());
+                }
                 break;
         }
     }
@@ -106,9 +131,10 @@ public class Controller {
      */
     @FXML
     void initialize() {
+        assert comboAudioOutput != null : "fx:id=\"comboAudioOutput\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
         assert labelPlayerName != null : "fx:id=\"labelPlayerName\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
         assert labelPlayerTime != null : "fx:id=\"labelPlayerTime\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
-        assert comboAudioOutput != null : "fx:id=\"comboAudioOutput\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
+        assert listViewPlaylist != null : "fx:id=\"listViewPlaylist\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
         assert sliderMasterVolume != null : "fx:id=\"sliderMasterVolume\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
         assert sliderPlayerTime != null : "fx:id=\"sliderPlayerTime\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
 
