@@ -1,6 +1,7 @@
 package myMP3Player;
 
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +16,8 @@ import javafx.util.Duration;
 
 import javax.sound.sampled.*;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Properties;
 
 /**
@@ -23,6 +26,7 @@ import java.util.Properties;
 public class Controller {
     private Duration duration;
     private MediaPlayer mediaPlayer;
+    private Path path;
 
     @FXML // fx:id="comboAudioOutput"
     private ComboBox<String> comboAudioOutput; // Value injected by FXMLLoader
@@ -67,9 +71,16 @@ public class Controller {
                 break;
             case "buttonPlaylistAdd":
                 FileChooser fileChooser = new FileChooser();
+                if (!path.toString().isEmpty()) {
+                    fileChooser.setInitialDirectory(new File(path.toString()));
+                }
                 File file = fileChooser.showOpenDialog(null);
                 if (file != null) {
+                    path = Paths.get(file.toURI());
+                    path = path.getParent();
+
                     setMedia(file);
+                    writeProperties();
                 }
                 break;
             case "buttonPlaylistRemove":
@@ -151,7 +162,25 @@ public class Controller {
         // https://docs.oracle.com/javafx/2/media/playercontrol.htm
 
         Media media = new Media(file.toURI().toString());
-        labelPlayerName.setText(media.getSource());
+        labelPlayerName.setText("");
+        media.getMetadata().addListener((MapChangeListener.Change<? extends String,?> c)-> {
+            if (c.wasAdded()){
+                if ("title".equals(c.getKey())){
+                    labelPlayerName.setText(c.getValueAdded().toString());
+                }
+//                else if ("artist".equals(c.getKey())){
+//                    System.out.println(c.getValueAdded().toString());
+//                }else if ("album".equals(c.getKey())){
+//                    System.out.println(c.getValueAdded().toString());
+//                }
+            }
+        });
+        if (labelPlayerName.getText().isEmpty()) {
+            String title = media.getSource();
+            title = title.substring(0, title.length() - ".mp3".length());
+            title = title.substring(title.lastIndexOf("/") + 1).replaceAll("%20", " ");
+            labelPlayerName.setText(title);
+        }
 
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.currentTimeProperty().addListener(observable -> updateTimeValue());
@@ -190,6 +219,9 @@ public class Controller {
      *  Load properties on startup
      */
     private void readProperties() {
+        File file = new File("src/myMP3Player/config.properties");
+        if(!file.exists()) writeProperties();
+
         try (InputStream inputStream = new FileInputStream("src/myMP3Player/config.properties")) {
             Properties properties = new Properties();
             properties.load(inputStream);
@@ -205,6 +237,7 @@ public class Controller {
                     }
                 }
             }
+            path = Paths.get(properties.getProperty("pathToMusic",""));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -219,6 +252,7 @@ public class Controller {
 
             properties.setProperty("sliderMasterVolume", String.valueOf(sliderMasterVolume.getValue()));
             properties.setProperty("comboAudioOutput", comboAudioOutput.getSelectionModel().getSelectedItem());
+            properties.setProperty("pathToMusic", path.toString());
 
             properties.store(outputStream, null);
         } catch (IOException io) {
