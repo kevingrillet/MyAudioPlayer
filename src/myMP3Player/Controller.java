@@ -121,6 +121,7 @@ public class Controller {
     void handleComboAction(ActionEvent event) {
         String id = ((Node) event.getSource()).getId();
         if ("comboAudioOutput".equals(id)) {
+            // TODO: 20/11/2020 MediaPlayer + AudioOutput 
             writeProperties();
         }
     }
