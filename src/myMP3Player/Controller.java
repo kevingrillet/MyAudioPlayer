@@ -190,6 +190,9 @@ public class Controller {
      *  Load properties on startup
      */
     private void readProperties() {
+        File file = new File("src/myMP3Player/config.properties");
+        if(!file.exists()) writeProperties();
+
         try (InputStream inputStream = new FileInputStream("src/myMP3Player/config.properties")) {
             Properties properties = new Properties();
             properties.load(inputStream);
