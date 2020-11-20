@@ -54,7 +54,7 @@
                   </BorderPane>
                </center>
                <bottom>
-                  <Label id="labelPlayerName" fx:id="labelPlayerName" text="Name" BorderPane.alignment="CENTER" />
+                  <Label id="labelPlayerName" fx:id="labelPlayerName" BorderPane.alignment="CENTER" />
                </bottom>
                <top>
                   <HBox alignment="CENTER" prefHeight="29.0" prefWidth="579.0" BorderPane.alignment="CENTER">

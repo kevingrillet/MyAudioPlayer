@@ -214,10 +214,7 @@ public class Controller {
             duration = mediaPlayer.getMedia().getDuration();
             updateTimeValue();
         });
-        mediaPlayer.setOnEndOfMedia(() -> {
-            mediaPlayer.stop();
-            mediaPlayer.seek(new Duration(0));
-        });
+        mediaPlayer.setOnEndOfMedia(() -> mediaPlayer.stop());
         /*______ MEDIA PLAYER ______*/
 
         /*______ MASTER LEVEL ______*/
