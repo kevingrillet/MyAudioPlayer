@@ -1,2 +1,2 @@
-# MyMP3Player
+# myMP3Player
  Java MP3 Player
