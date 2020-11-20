@@ -127,7 +127,7 @@ public class Controller {
     }
 
     /**
-     *  Set default values for
+     *  Set default values
      */
     private void setDefaultValues() {
         /*______ AUDIO OUTPUT ______*/

@@ -1,1 +1,0 @@
-memberSearchIndex = [{"p":"myMP3Player","c":"Controller","l":"Controller()","u":"%3Cinit%3E()"},{"p":"myMP3Player","c":"Main","l":"Main()","u":"%3Cinit%3E()"},{"p":"myMP3Player","c":"Main","l":"main(String[])","u":"main(java.lang.String[])"},{"p":"myMP3Player","c":"Main","l":"start(Stage)","u":"start(javafx.stage.Stage)"}];updateSearchResults();
