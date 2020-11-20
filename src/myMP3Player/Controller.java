@@ -102,7 +102,7 @@ public class Controller {
                     if (listViewPlaylist.getSelectionModel().getSelectedIndex() == 0) {
                         if (!(mediaPlayer == null)) {
                             mediaPlayer.stop();
-                            if (listViewPlaylist.getItems().size() > 0) {
+                            if (listViewPlaylist.getItems().size() > 1) {
                                 setMedia(new File(listViewPlaylist.getItems().get(1)));
                             }
                         }
@@ -154,7 +154,6 @@ public class Controller {
                 listAudioOutput.add(info.getName());
             }
         }
-
         comboAudioOutput.setItems(listAudioOutput);
 
         // Play: https://stackoverflow.com/questions/37609430/play-sound-on-specific-sound-device-java
