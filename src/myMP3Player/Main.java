@@ -6,6 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+/**
+ *  Main of MyMP3Player
+ */
 public class Main extends Application {
 
     @Override
@@ -16,6 +19,10 @@ public class Main extends Application {
         primaryStage.show();
     }
 
+    /**
+     *
+     * @param args launch arguments
+     */
     public static void main(String[] args) {
         launch(args);
     }
