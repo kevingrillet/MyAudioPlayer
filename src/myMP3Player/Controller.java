@@ -1,5 +1,7 @@
 package myMP3Player;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -7,10 +9,12 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
+import javafx.scene.media.MediaPlayer;
 
 import javax.sound.sampled.*;
 
 public class Controller {
+    private MediaPlayer mediaPlayer;
 
     @FXML // fx:id="sliderMasterVolume"
     private Slider sliderMasterVolume; // Value injected by FXMLLoader
@@ -32,8 +36,14 @@ public class Controller {
                 break;
             case "buttonPlaylistRemove":
                 break;
-            default:
-                break;
+        }
+    }
+
+    @FXML
+    void handleComboAction(ActionEvent event) {
+        String id = ((Node) event.getSource()).getId();
+        if ("comboAudioOutput".equals(id)) {
+            // how to put the Output...
         }
     }
 
@@ -69,6 +79,11 @@ public class Controller {
         /*______ AUDIO OUTPUT ______*/
 
         /*______ MASTER LEVEL ______*/
+        sliderMasterVolume.valueProperty().addListener(observable -> {
+            if (sliderMasterVolume.isValueChanging()) {
+                mediaPlayer.setVolume(sliderMasterVolume.getValue() / 100.0);
+            }
+        });
         sliderMasterVolume.setValue(1.00);
         /*______ MASTER LEVEL ______*/
     }

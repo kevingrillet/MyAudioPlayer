@@ -34,7 +34,7 @@
                   </HBox>
                </right>
                <center>
-                  <ComboBox id="comboAudioOutput" fx:id="comboAudioOutput" prefHeight="25.0" prefWidth="245.0" BorderPane.alignment="CENTER" />
+                  <ComboBox id="comboAudioOutput" fx:id="comboAudioOutput" onAction="#handleComboAction" prefHeight="25.0" prefWidth="245.0" BorderPane.alignment="CENTER" />
                </center>
             </BorderPane>
          </TitledPane>
