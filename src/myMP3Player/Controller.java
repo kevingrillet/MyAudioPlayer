@@ -19,6 +19,7 @@ import javax.sound.sampled.*;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -27,6 +28,7 @@ import java.util.Properties;
  */
 public class Controller {
     private Duration duration;
+    private List<String> listPath;
     private MediaPlayer mediaPlayer;
     private Path path;
 
@@ -90,12 +92,13 @@ public class Controller {
                         path = Paths.get(file.toURI());
                         path = path.getParent();
 
-                        listViewPlaylist.getItems().add(file.toString());
+                        listPath.add(file.toString());
+                        listViewPlaylist.getItems().add(file.getName());
 //                        setMedia(file);
                         writeProperties();
                     }
                 }
-                setMedia(new File(listViewPlaylist.getItems().get(0)));
+                setMedia(new File(listPath.get(0)));
                 break;
             case "buttonPlaylistRemove":
                 if (listViewPlaylist.getSelectionModel().getSelectedIndex()>=0){
@@ -103,10 +106,11 @@ public class Controller {
                         if (!(mediaPlayer == null)) {
                             mediaPlayer.stop();
                             if (listViewPlaylist.getItems().size() > 1) {
-                                setMedia(new File(listViewPlaylist.getItems().get(1)));
+                                setMedia(new File(listPath.get(1)));
                             }
                         }
                     }
+                    listPath.remove(listViewPlaylist.getSelectionModel().getSelectedIndex());
                     listViewPlaylist.getItems().remove(listViewPlaylist.getSelectionModel().getSelectedIndex());
                 }
                 break;
@@ -152,6 +156,8 @@ public class Controller {
         assert listViewPlaylist != null : "fx:id=\"listViewPlaylist\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
         assert sliderMasterVolume != null : "fx:id=\"sliderMasterVolume\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
         assert sliderPlayerTime != null : "fx:id=\"sliderPlayerTime\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
+
+        listPath = new ArrayList<>();
 
         /*______ AUDIO OUTPUT ______*/
         // How to get list of AudioOutput.
@@ -231,9 +237,10 @@ public class Controller {
         mediaPlayer.setOnEndOfMedia(() -> {
             mediaPlayer.stop();
             mediaPlayer.seek(new Duration(0));
+            listPath.remove(0);
             listViewPlaylist.getItems().remove(0);
             if (listViewPlaylist.getItems().size() > 0) {
-                setMedia(new File(listViewPlaylist.getItems().get(0)));
+                setMedia(new File(listPath.get(0)));
                 mediaPlayer.play();
             }
         });
