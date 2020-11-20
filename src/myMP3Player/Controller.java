@@ -119,12 +119,27 @@ public class Controller {
         }
 
         comboAudioOutput.setItems(listAudioOutput);
-        // set default output with getMixer(null)
-        comboAudioOutput.getSelectionModel().select(AudioSystem.getMixer(null).getMixerInfo().getName());
 
         // Play: https://stackoverflow.com/questions/37609430/play-sound-on-specific-sound-device-java
         /*______ AUDIO OUTPUT ______*/
+        setDefaultValues();
         readProperties();
+    }
+
+    /**
+     *  Set default values for
+     */
+    private void setDefaultValues() {
+        /*______ AUDIO OUTPUT ______*/
+        // set default output with getMixer(null)
+        comboAudioOutput.getSelectionModel().select(AudioSystem.getMixer(null).getMixerInfo().getName());
+        /*______ MASTER LEVEL ______*/
+        sliderMasterVolume.setValue(100.0);
+        /*______ MASTER LEVEL ______*/
+        /*______ MEDIA PLAYER ______*/
+        sliderPlayerTime.setValue(0);
+        sliderPlayerTime.setDisable(true);
+        /*______ MEDIA PLAYER ______*/
     }
 
     /**
