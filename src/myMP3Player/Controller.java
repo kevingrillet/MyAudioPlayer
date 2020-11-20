@@ -6,8 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Slider;
 
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Mixer;
+import javax.sound.sampled.*;
 
 public class Controller {
     @FXML
@@ -24,27 +23,32 @@ public class Controller {
 
 
 
-        // tests WIP
-
-
         /*______ AUDIO OUTPUT ______*/
-//      How to get list of AudioOutput.
+        // How to get list of AudioOutput.
         Mixer.Info[] mixerInfo =  AudioSystem.getMixerInfo();
         ObservableList<String> listAudioOutput = FXCollections.observableArrayList();
+        // Output
+        Line.Info playbackLine = new Line.Info(SourceDataLine.class);
+        // Input
+//        Line.Info captureLine = new Line.Info(TargetDataLine.class);
 
         for (Mixer.Info info : mixerInfo) {
-            listAudioOutput.add(info.getName());
+            // Filter on Output
+            Mixer mixer = AudioSystem.getMixer(info);
+            if (mixer.isLineSupported(playbackLine)){
+                listAudioOutput.add(info.getName());
+            }
         }
 
-//        ComboBox<String> comboAudioOutput = new ComboBox<String>();
-//        comboAudioOutput.setItems(listAudioOutput);
-//        comboAudioOutput.getSelectionModel().select(1);
+        comboAudioOutput.setItems(listAudioOutput);
+        // set default output with getMixer(null)
+        comboAudioOutput.getSelectionModel().select(AudioSystem.getMixer(null).getMixerInfo().getName());
 
-        /*Play: https://stackoverflow.com/questions/37609430/play-sound-on-specific-sound-device-java*/
+        // Play: https://stackoverflow.com/questions/37609430/play-sound-on-specific-sound-device-java
         /*______ AUDIO OUTPUT ______*/
 
         /*______ MASTER LEVEL ______*/
-//        sliderMasterVolume.getValue();
+        sliderMasterVolume.setValue(1.00);
         /*______ MASTER LEVEL ______*/
     }
 }
