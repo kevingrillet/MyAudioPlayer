@@ -101,10 +101,9 @@ public class Controller {
                 if (listViewPlaylist.getSelectionModel().getSelectedIndex()>=0){
                     if (listViewPlaylist.getSelectionModel().getSelectedIndex() == 0) {
                         if (!(mediaPlayer == null)) {
+                            mediaPlayer.stop();
                             if (listViewPlaylist.getItems().size()>0) {
                                 setMedia(new File(listViewPlaylist.getItems().get(1)));
-                            } else {
-                                mediaPlayer.stop();
                             }
                         }
                     }
