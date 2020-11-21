@@ -24,4 +24,4 @@ hs_err_pid*
 
 #IntelliJ IDEA
 /out/
-/src/myMP3Player/config.properties
+/src/myMP3Player/Resources/config.properties

@@ -1,11 +1,11 @@
-package myMP3Player;
+package myMP3Player.Utils;
 
 import javafx.util.Duration;
 
 /**
  *  Tools for easier life
  */
-public class Tools {
+public class UtilsDateTime {
     /**
      *
      * @param elapsed Current time of the Media

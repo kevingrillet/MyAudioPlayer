@@ -14,6 +14,8 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
+import myMP3Player.Utils.UtilsDateTime;
+import myMP3Player.Utils.UtilsProperties;
 
 import javax.sound.sampled.*;
 import java.io.*;
@@ -21,7 +23,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Properties;
+import java.util.Map;
 
 /**
  *  Heart link to MyMP3Player.fxml
@@ -29,6 +31,7 @@ import java.util.Properties;
 public class Controller {
     private Duration duration;
     private List<String> listPath;
+    private Map<String,String> mapProperties;
     private MediaPlayer mediaPlayer;
     private Path path;
 
@@ -95,7 +98,9 @@ public class Controller {
                         listPath.add(file.toString());
                         listViewPlaylist.getItems().add(file.getName());
 //                        setMedia(file);
-                        writeProperties();
+
+                        mapProperties.replace("pathToMusic", path.toString());
+                        UtilsProperties.writeProperties(mapProperties);
                     }
                 }
                 setMedia(new File(listPath.get(0)));
@@ -140,8 +145,8 @@ public class Controller {
 //                    break;
 //                }
 //            }
-
-            writeProperties();
+            mapProperties.replace("audioOutput",comboAudioOutput.getSelectionModel().getSelectedItem());
+            UtilsProperties.writeProperties(mapProperties);
         }
     }
 
@@ -179,24 +184,25 @@ public class Controller {
 
         // Play: https://stackoverflow.com/questions/37609430/play-sound-on-specific-sound-device-java
         /*______ AUDIO OUTPUT ______*/
-        setDefaultValues();
-        readProperties();
-    }
 
-    /**
-     *  Set default values
-     */
-    private void setDefaultValues() {
-        /*______ AUDIO OUTPUT ______*/
-        // set default output with getMixer(null)
-        comboAudioOutput.getSelectionModel().select(AudioSystem.getMixer(null).getMixerInfo().getName());
-        /*______ MASTER LEVEL ______*/
-        sliderMasterVolume.setValue(100.0);
-        /*______ MASTER LEVEL ______*/
-        /*______ MEDIA PLAYER ______*/
-        sliderPlayerTime.setValue(0);
-        sliderPlayerTime.setDisable(true);
-        /*______ MEDIA PLAYER ______*/
+        /*______ LOAD PROPERTIES _____*/
+        mapProperties = UtilsProperties.readProperties();
+
+        sliderMasterVolume.setValue(Double.parseDouble(mapProperties.get("masterVolume")));
+        String mixerName = mapProperties.get("audioOutput");
+        if (mixerName.isEmpty()) {
+            // set default output with getMixer(null)
+            comboAudioOutput.getSelectionModel().select(AudioSystem.getMixer(null).getMixerInfo().getName());
+        }else{
+            for (Mixer.Info info : mixerInfo) {
+                if (info.getName().equals(mixerName)) {
+                    comboAudioOutput.getSelectionModel().select(AudioSystem.getMixer(info).getMixerInfo().getName());
+                    break;
+                }
+            }
+        }
+        path = Paths.get(mapProperties.get("pathToMusic"));
+        /*______ LOAD PROPERTIES _____*/
     }
 
     /**
@@ -252,7 +258,8 @@ public class Controller {
         sliderMasterVolume.valueProperty().addListener(observable -> {
             if (mediaPlayer != null) {
                 mediaPlayer.setVolume(sliderMasterVolume.getValue() / 100.0);
-                writeProperties();
+                mapProperties.replace("masterVolume", String.valueOf(sliderMasterVolume.getValue()));
+                UtilsProperties.writeProperties(mapProperties);
             }
         });
         /*______ MASTER LEVEL ______*/
@@ -269,56 +276,11 @@ public class Controller {
     }
 
     /**
-     *  Load properties on startup
-     */
-    private void readProperties() {
-        File file = new File("src/myMP3Player/config.properties");
-        if(!file.exists()) writeProperties();
-
-        try (InputStream inputStream = new FileInputStream("src/myMP3Player/config.properties")) {
-            Properties properties = new Properties();
-            properties.load(inputStream);
-
-            sliderMasterVolume.setValue(Double.parseDouble(properties.getProperty("sliderMasterVolume","100.0")));
-            String mixerName = properties.getProperty("comboAudioOutput","");
-            if (!mixerName.isEmpty()) {
-                Mixer.Info[] mixerInfo =  AudioSystem.getMixerInfo();
-                for (Mixer.Info info : mixerInfo) {
-                    if (info.getName().equals(mixerName)) {
-                        comboAudioOutput.getSelectionModel().select(AudioSystem.getMixer(info).getMixerInfo().getName());
-                        break;
-                    }
-                }
-            }
-            path = Paths.get(properties.getProperty("pathToMusic",""));
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    /**
-     *  Save properties
-     */
-    private void writeProperties() {
-        try (OutputStream outputStream = new FileOutputStream("src/myMP3Player/config.properties")) {
-            Properties properties = new Properties();
-
-            properties.setProperty("sliderMasterVolume", String.valueOf(sliderMasterVolume.getValue()));
-            properties.setProperty("comboAudioOutput", comboAudioOutput.getSelectionModel().getSelectedItem());
-            properties.setProperty("pathToMusic", path.toString());
-
-            properties.store(outputStream, null);
-        } catch (IOException io) {
-            io.printStackTrace();
-        }
-    }
-
-    /**
      *  Update Media time Label & Slider
      */
     private void updateTimeValue(){
         Duration currentTime = mediaPlayer.getCurrentTime();
-        labelPlayerTime.setText(Tools.formatTime(currentTime, duration));
+        labelPlayerTime.setText(UtilsDateTime.formatTime(currentTime, duration));
         sliderPlayerTime.setDisable(duration.isUnknown());
         if (!sliderPlayerTime.isDisabled()
                 && duration.greaterThan(Duration.ZERO)

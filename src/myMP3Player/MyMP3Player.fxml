@@ -30,7 +30,7 @@
                            <Insets left="10.0" right="10.0" />
                         </padding>
                      </Label>
-                     <Slider id="sliderMasterVolume" fx:id="sliderMasterVolume" />
+                     <Slider id="sliderMasterVolume" fx:id="sliderMasterVolume" value="100.0" />
                   </HBox>
                </right>
                <center>
@@ -49,7 +49,7 @@
                         <Label fx:id="labelPlayerTime" text="0:00/0:00" BorderPane.alignment="CENTER" />
                      </right>
                      <center>
-                        <Slider id="sliderPlayerTime" fx:id="sliderPlayerTime" prefHeight="14.0" prefWidth="495.0" BorderPane.alignment="CENTER" />
+                        <Slider id="sliderPlayerTime" fx:id="sliderPlayerTime" disable="true" prefHeight="14.0" prefWidth="495.0" BorderPane.alignment="CENTER" />
                      </center>
                   </BorderPane>
                </center>
