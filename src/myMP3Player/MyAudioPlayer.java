@@ -1,6 +1,7 @@
 package myMP3Player;
 
 import java.util.Collection;
+import java.util.List;
 
 public interface MyAudioPlayer {
     /**
@@ -24,6 +25,18 @@ public interface MyAudioPlayer {
      */
     double getDuration();
 
+    /**
+     * Get list of compatible formats
+     *
+     * @return List<String>: List of formats for FileChooser.ExtensionFilter
+     */
+    List<String> getFormats();
+
+    /**
+     * Get the name of the current media
+     *
+     * @return String: Name of the current media
+     */
     String getMediaName();
 
     /**
@@ -62,8 +75,16 @@ public interface MyAudioPlayer {
      */
     void play();
 
+    /**
+     * Get back to the beginning of the music
+     */
     void previous();
 
+    /**
+     * Remove a music from the playlist
+     *
+     * @param index of the music to remove
+     */
     void remove(int index);
 
     /**
@@ -73,6 +94,9 @@ public interface MyAudioPlayer {
      */
     void seek(double time);
 
+    /**
+     * Select first media to play
+     */
     void setMedia();
 
     /**

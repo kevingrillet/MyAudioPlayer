@@ -72,7 +72,8 @@ public class Controller {
                 break;
             case "buttonPlaylistAdd":
                 FileChooser fileChooser = new FileChooser();
-                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Files", myProperties.getFormats()));
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Audio Files", myProperties.getFormats()));
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("AudioPlayer", myAudioPlayer.getFormats()));
                 if (!myProperties.getPathToMusic().toString().isEmpty()) {
                     fileChooser.setInitialDirectory(new File(myProperties.getPathToMusic().toString()));
                 }

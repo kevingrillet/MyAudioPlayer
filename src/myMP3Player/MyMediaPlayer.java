@@ -4,6 +4,7 @@ import javafx.collections.MapChangeListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+import myMP3Player.Utils.UtilsProperties;
 
 import java.io.File;
 import java.util.Collection;
@@ -11,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class MyMediaPlayer implements MyAudioPlayer {
+    private final static String formats = "*.aif, *.aiff, *.aifc, *.m4a, *.mp3, *.wav, *.WAV";
     private final List<String> queue;
     private MediaPlayer mediaPlayer;
 
@@ -31,6 +33,11 @@ public class MyMediaPlayer implements MyAudioPlayer {
     @Override
     public double getDuration() {
         return mediaPlayer.getTotalDuration().toMillis();
+    }
+
+    @Override
+    public List<String> getFormats() {
+        return UtilsProperties.readFormats(formats);
     }
 
     @Override
