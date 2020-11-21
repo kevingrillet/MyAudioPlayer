@@ -164,6 +164,23 @@ public class MusicPlayer {
         return status;
     }
 
+    /**
+     * Go to time position
+     * @param time (long): time in milliseconds
+     */
+    public void seek(long time){
+        clip.setMicrosecondPosition(time);
+    }
+
+    /**
+     * Value between 0 and 1
+     */
+    public void setVolume(float v){
+        assert (v >= 0 && v <= 1);
+        FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+        gainControl.setValue(20f * (float) Math.log10(v));
+    }
+
 
     private static long getDuration(File file) {
         try {
