@@ -1,10 +1,13 @@
 package myMP3Player.Utils;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 public class UtilsProperties {
-    final private static String pathToConfig = "src/myMP3Player/Resources/config.properties";
+    final private static String configFile = "config.properties";
+    final private static String pathToConfig = "src/myMP3Player/Resources";
 
     /**
      *  Load properties on startup
@@ -12,11 +15,12 @@ public class UtilsProperties {
      */
     public static Map<String, String> readProperties() {
         Map<String, String> map = new HashMap<>();
-        File file = new File(pathToConfig);
+        File file = new File(pathToConfig + "/" + configFile);
         if(!file.exists()) {
             try {
-                new FileOutputStream(pathToConfig);
-            } catch (FileNotFoundException e) {
+                Files.createDirectories(Paths.get(pathToConfig));
+                new FileOutputStream(pathToConfig + "/" + configFile);
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
@@ -44,7 +48,7 @@ public class UtilsProperties {
      * @param map Map<String key, String value>
      */
     public static void writeProperties(Map<String,String> map) {
-        try (OutputStream outputStream = new FileOutputStream(pathToConfig)) {
+        try (OutputStream outputStream = new FileOutputStream(pathToConfig + "/" + configFile)) {
             Properties properties = new Properties();
 
             for (Map.Entry<String, String> entry : map.entrySet()) {
