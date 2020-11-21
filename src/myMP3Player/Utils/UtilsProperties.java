@@ -8,15 +8,16 @@ import java.util.*;
 public class UtilsProperties {
 
     /**
-     *  Load properties
+     * Load properties
+     *
      * @param pathToConfig Path to config file
-     * @param configFile Name of the config file
+     * @param configFile   Name of the config file
      * @return Map<String key, String value>
      */
     public static Map<String, String> readProperties(String pathToConfig, String configFile) {
         Map<String, String> map = new HashMap<>();
         File file = new File(pathToConfig + "/" + configFile);
-        if(!file.exists()) {
+        if (!file.exists()) {
             try {
                 Files.createDirectories(Paths.get(pathToConfig));
                 new FileOutputStream(pathToConfig + "/" + configFile);
@@ -40,11 +41,12 @@ public class UtilsProperties {
 
     /**
      * Save properties
+     *
      * @param pathToConfig Path to config file
-     * @param configFile Name of the config file
-     * @param map Map<String key, String value>
+     * @param configFile   Name of the config file
+     * @param map          Map<String key, String value>
      */
-    public static void writeProperties(String pathToConfig, String configFile, Map<String,String> map) {
+    public static void writeProperties(String pathToConfig, String configFile, Map<String, String> map) {
         try (OutputStream outputStream = new FileOutputStream(pathToConfig + "/" + configFile)) {
             Properties properties = new Properties();
 
@@ -62,6 +64,7 @@ public class UtilsProperties {
 
     /**
      * Format formats
+     *
      * @param formatsProperty ex: *.mp3, *.wav
      * @return [*.mp3; *.wav]
      */

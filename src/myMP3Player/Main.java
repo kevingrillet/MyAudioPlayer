@@ -7,12 +7,12 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 /**
- *  Main of MyMP3Player
+ * Main of MyMP3Player
  */
 public class Main extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("MyMP3Player.fxml"));
         primaryStage.setTitle("MyMP3Player");
         primaryStage.setScene(new Scene(root/*, 300, 275*/));
@@ -20,7 +20,6 @@ public class Main extends Application {
     }
 
     /**
-     *
      * @param args launch arguments
      */
     public static void main(String[] args) {

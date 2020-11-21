@@ -11,77 +11,86 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="myMP3Player.Controller">
-   <top>
-      <VBox BorderPane.alignment="CENTER">
-         <TitledPane animated="false" collapsible="false" prefHeight="60.0" prefWidth="600.0" text="Audio Settings">
-            <BorderPane>
-               <left>
-                  <Label text="Output" BorderPane.alignment="CENTER">
-                     <padding>
-                        <Insets right="10.0" top="10.0" />
-                     </padding>
-                  </Label>
-               </left>
-               <right>
-                  <HBox BorderPane.alignment="CENTER">
-                     <Label text="Master volume">
-                        <padding>
-                           <Insets left="10.0" right="10.0" />
-                        </padding>
-                     </Label>
-                     <Slider id="sliderMasterVolume" fx:id="sliderMasterVolume" value="100.0" />
-                  </HBox>
-               </right>
-               <center>
-                  <ComboBox id="comboAudioOutput" fx:id="comboAudioOutput" onAction="#handleComboAction" prefHeight="25.0" prefWidth="245.0" BorderPane.alignment="CENTER" />
-               </center>
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="myMP3Player.Controller">
+    <top>
+        <VBox BorderPane.alignment="CENTER">
+            <TitledPane animated="false" collapsible="false" prefHeight="60.0" prefWidth="600.0" text="Audio Settings">
+                <BorderPane>
+                    <left>
+                        <Label text="Output" BorderPane.alignment="CENTER">
+                            <padding>
+                                <Insets right="10.0" top="10.0"/>
+                            </padding>
+                        </Label>
+                    </left>
+                    <right>
+                        <HBox BorderPane.alignment="CENTER">
+                            <Label text="Master volume">
+                                <padding>
+                                    <Insets left="10.0" right="10.0"/>
+                                </padding>
+                            </Label>
+                            <Slider id="sliderMasterVolume" fx:id="sliderMasterVolume" value="100.0"/>
+                        </HBox>
+                    </right>
+                    <center>
+                        <ComboBox id="comboAudioOutput" fx:id="comboAudioOutput" onAction="#handleComboAction"
+                                  prefHeight="25.0" prefWidth="245.0" BorderPane.alignment="CENTER"/>
+                    </center>
+                </BorderPane>
+            </TitledPane>
+            <TitledPane animated="false" collapsible="false" text="Player">
+                <BorderPane prefHeight="50.0" prefWidth="200.0">
+                    <center>
+                        <BorderPane BorderPane.alignment="CENTER">
+                            <left>
+                                <Label text="Time: " BorderPane.alignment="CENTER"/>
+                            </left>
+                            <right>
+                                <Label fx:id="labelPlayerTime" text="0:00/0:00" BorderPane.alignment="CENTER"/>
+                            </right>
+                            <center>
+                                <Slider id="sliderPlayerTime" fx:id="sliderPlayerTime" disable="true" prefHeight="14.0"
+                                        prefWidth="495.0" BorderPane.alignment="CENTER"/>
+                            </center>
+                        </BorderPane>
+                    </center>
+                    <bottom>
+                        <Label id="labelPlayerName" fx:id="labelPlayerName" BorderPane.alignment="CENTER"/>
+                    </bottom>
+                    <top>
+                        <HBox alignment="CENTER" prefHeight="29.0" prefWidth="579.0" BorderPane.alignment="CENTER">
+                            <Button id="buttonPlayerStop" mnemonicParsing="false" onAction="#handleButtonAction"
+                                    text="⏹"/>
+                            <Button id="buttonPlayerPlay" mnemonicParsing="false" onAction="#handleButtonAction"
+                                    text="▶"/>
+                            <Button id="buttonPlayerPause" mnemonicParsing="false" onAction="#handleButtonAction"
+                                    text="⏸"/>
+                            <Button id="buttonPlayerPrevious" mnemonicParsing="false" onAction="#handleButtonAction"
+                                    text="⏮"/>
+                            <Button id="buttonPlayerNext" mnemonicParsing="false" onAction="#handleButtonAction"
+                                    text="⏭"/>
+                        </HBox>
+                    </top>
+                </BorderPane>
+            </TitledPane>
+        </VBox>
+    </top>
+    <center>
+        <TitledPane animated="false" collapsible="false" text="Playlist" BorderPane.alignment="CENTER">
+            <BorderPane prefHeight="200.0" prefWidth="200.0">
+                <bottom>
+                    <HBox BorderPane.alignment="CENTER">
+                        <Button id="buttonPlaylistAdd" mnemonicParsing="false" onAction="#handleButtonAction" text="+"/>
+                        <Button id="buttonPlaylistRemove" mnemonicParsing="false" onAction="#handleButtonAction"
+                                text="-"/>
+                    </HBox>
+                </bottom>
+                <center>
+                    <ListView id="listViewPlaylist" fx:id="listViewPlaylist" BorderPane.alignment="CENTER"/>
+                </center>
             </BorderPane>
-         </TitledPane>
-         <TitledPane animated="false" collapsible="false" text="Player">
-            <BorderPane prefHeight="50.0" prefWidth="200.0">
-               <center>
-                  <BorderPane BorderPane.alignment="CENTER">
-                     <left>
-                        <Label text="Time: " BorderPane.alignment="CENTER" />
-                     </left>
-                     <right>
-                        <Label fx:id="labelPlayerTime" text="0:00/0:00" BorderPane.alignment="CENTER" />
-                     </right>
-                     <center>
-                        <Slider id="sliderPlayerTime" fx:id="sliderPlayerTime" disable="true" prefHeight="14.0" prefWidth="495.0" BorderPane.alignment="CENTER" />
-                     </center>
-                  </BorderPane>
-               </center>
-               <bottom>
-                  <Label id="labelPlayerName" fx:id="labelPlayerName" BorderPane.alignment="CENTER" />
-               </bottom>
-               <top>
-                  <HBox alignment="CENTER" prefHeight="29.0" prefWidth="579.0" BorderPane.alignment="CENTER">
-                     <Button id="buttonPlayerStop" mnemonicParsing="false" onAction="#handleButtonAction" text="⏹" />
-                     <Button id="buttonPlayerPlay" mnemonicParsing="false" onAction="#handleButtonAction" text="▶" />
-                     <Button id="buttonPlayerPause" mnemonicParsing="false" onAction="#handleButtonAction" text="⏸" />
-                     <Button id="buttonPlayerPrevious" mnemonicParsing="false" onAction="#handleButtonAction" text="⏮" />
-                     <Button id="buttonPlayerNext" mnemonicParsing="false" onAction="#handleButtonAction" text="⏭" />
-                  </HBox>
-               </top>
-            </BorderPane>
-         </TitledPane>
-      </VBox>
-   </top>
-   <center>
-      <TitledPane animated="false" collapsible="false" text="Playlist" BorderPane.alignment="CENTER">
-         <BorderPane prefHeight="200.0" prefWidth="200.0">
-            <bottom>
-               <HBox BorderPane.alignment="CENTER">
-                  <Button id="buttonPlaylistAdd" mnemonicParsing="false" onAction="#handleButtonAction" text="+" />
-                  <Button id="buttonPlaylistRemove" mnemonicParsing="false" onAction="#handleButtonAction" text="-" />
-               </HBox>
-            </bottom>
-            <center>
-               <ListView id="listViewPlaylist" fx:id="listViewPlaylist" BorderPane.alignment="CENTER" />
-            </center>
-         </BorderPane>
-      </TitledPane>
-   </center>
+        </TitledPane>
+    </center>
 </BorderPane>

@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  Heart link to MyMP3Player.fxml
+ * Heart link to MyMP3Player.fxml
  */
 public class Controller {
     private Duration duration;
@@ -51,6 +51,7 @@ public class Controller {
 
     /**
      * Handle the events of the buttons
+     *
      * @param event ActionEvent to get the node ID.
      */
     @FXML
@@ -59,7 +60,7 @@ public class Controller {
         switch (id) {
             case "buttonPlayerStop":
                 if (!(mediaPlayer == null)) {
-                    if ( mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                    if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
                         mediaPlayer.stop();
                         mediaPlayer.seek(mediaPlayer.getStartTime());
                     }
@@ -67,14 +68,14 @@ public class Controller {
                 break;
             case "buttonPlayerPause":
                 if (!(mediaPlayer == null)) {
-                    if ( mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
+                    if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
                         mediaPlayer.pause();
                     }
                 }
                 break;
             case "buttonPlayerPlay":
                 if (!(mediaPlayer == null)) {
-                    if ( mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED
+                    if (mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED
                             || mediaPlayer.getStatus() == MediaPlayer.Status.READY
                             || mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
                         mediaPlayer.play();
@@ -120,7 +121,7 @@ public class Controller {
                 }
                 break;
             case "buttonPlaylistRemove":
-                if (listViewPlaylist.getSelectionModel().getSelectedIndex()>=0){
+                if (listViewPlaylist.getSelectionModel().getSelectedIndex() >= 0) {
                     if (listViewPlaylist.getSelectionModel().getSelectedIndex() == 0) {
                         if (!(mediaPlayer == null)) {
                             mediaPlayer.stop();
@@ -138,6 +139,7 @@ public class Controller {
 
     /**
      * Handle the events of the combos
+     *
      * @param event ActionEvent to get the node ID.
      */
     @FXML
@@ -145,7 +147,7 @@ public class Controller {
         String id = ((Node) event.getSource()).getId();
         if ("comboAudioOutput".equals(id)) {
             // WIP: 20/11/2020 AudioOutput + MediaPlayer
-            Mixer.Info[] mixerInfo =  AudioSystem.getMixerInfo();
+            Mixer.Info[] mixerInfo = AudioSystem.getMixerInfo();
             for (Mixer.Info info : mixerInfo) {
                 if (info.getName().equals(comboAudioOutput.getSelectionModel().getSelectedItem())) {
 //                    try {
@@ -164,7 +166,7 @@ public class Controller {
     }
 
     /**
-     *  This method is called by the FXMLLoader when initialization is complete
+     * This method is called by the FXMLLoader when initialization is complete
      */
     @FXML
     void initialize() {
@@ -179,7 +181,7 @@ public class Controller {
 
         /*______ AUDIO OUTPUT ______*/
         // How to get list of AudioOutput.
-        Mixer.Info[] mixerInfo =  AudioSystem.getMixerInfo();
+        Mixer.Info[] mixerInfo = AudioSystem.getMixerInfo();
         ObservableList<String> listAudioOutput = FXCollections.observableArrayList();
         // Output
         Line.Info playbackLine = new Line.Info(SourceDataLine.class);
@@ -189,7 +191,7 @@ public class Controller {
         for (Mixer.Info info : mixerInfo) {
             // Filter on Output
             Mixer mixer = AudioSystem.getMixer(info);
-            if (mixer.isLineSupported(playbackLine)){
+            if (mixer.isLineSupported(playbackLine)) {
                 listAudioOutput.add(info.getName());
             }
         }
@@ -207,18 +209,17 @@ public class Controller {
     }
 
     /**
-     *
      * @param file MediaFile to Read
      */
-    private void setMedia (File file) {
+    private void setMedia(File file) {
         /*______ MEDIA PLAYER ______*/
         // https://docs.oracle.com/javafx/2/media/playercontrol.htm
 
         Media media = new Media(file.toURI().toString());
         labelPlayerName.setText("");
-        media.getMetadata().addListener((MapChangeListener.Change<? extends String,?> c)-> {
-            if (c.wasAdded()){
-                if ("title".equals(c.getKey())){
+        media.getMetadata().addListener((MapChangeListener.Change<? extends String, ?> c) -> {
+            if (c.wasAdded()) {
+                if ("title".equals(c.getKey())) {
                     labelPlayerName.setText(c.getValueAdded().toString());
                 }
 //                else if ("artist".equals(c.getKey())){
@@ -276,9 +277,9 @@ public class Controller {
     }
 
     /**
-     *  Update Media time Label & Slider
+     * Update Media time Label & Slider
      */
-    private void updateTimeValue(){
+    private void updateTimeValue() {
         Duration currentTime = mediaPlayer.getCurrentTime();
         labelPlayerTime.setText(UtilsDateTime.formatTime(currentTime, duration));
         sliderPlayerTime.setDisable(duration.isUnknown());
