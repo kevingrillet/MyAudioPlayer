@@ -5,11 +5,11 @@ import javafx.util.Duration;
 
 import java.util.Collection;
 import java.util.LinkedList;
-import java.util.Queue;
+import java.util.List;
 
-public class MyMediaPlayer implements MyAudioPlayer{
-    private Duration duration;
-    private Queue<String> queue;
+public class MyMediaPlayer implements MyAudioPlayer {
+    private final List<String> queue;
+    private long duration;
     private MediaPlayer mediaPlayer;
 
     public MyMediaPlayer() {
@@ -24,6 +24,25 @@ public class MyMediaPlayer implements MyAudioPlayer{
     @Override
     public void addAll(Collection<String> paths) {
         queue.addAll(paths);
+    }
+
+    @Override
+    public double getDuration() {
+        return mediaPlayer.getTotalDuration().toMillis();
+    }
+
+    @Override
+    public double getTime() {
+        return mediaPlayer.getCurrentTime().toMillis();
+    }
+
+    @Override
+    public double getVolume() {
+        if (!(mediaPlayer == null)) {
+            return mediaPlayer.getVolume();
+        } else {
+            return -1;
+        }
     }
 
     @Override
@@ -73,6 +92,21 @@ public class MyMediaPlayer implements MyAudioPlayer{
     @Override
     public void remove(int index) {
         queue.remove(index);
+    }
+
+    @Override
+    public void seek(double time) {
+        if (!(mediaPlayer == null)) {
+            mediaPlayer.seek(new Duration(time));
+        }
+    }
+
+    @Override
+    public void setVolume(double volume) {
+        assert (volume >= 0 && volume <= 1);
+        if (!(mediaPlayer == null)) {
+            mediaPlayer.setVolume(volume);
+        }
     }
 
     @Override
