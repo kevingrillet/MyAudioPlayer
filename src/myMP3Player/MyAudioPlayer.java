@@ -7,6 +7,16 @@ public interface MyAudioPlayer {
 
     void addAll(Collection<String> paths);
 
+    double getDuration();
+
+    double getTime();
+
+    /**
+     *  Return Volume of mediaPlayer.
+     * @return Return volume between 0 and 1. -1 is return if MediaPlayer is null.
+     */
+    double getVolume();
+
     void next();
 
     void pause();
@@ -16,6 +26,10 @@ public interface MyAudioPlayer {
     void previous();
 
     void remove(int index);
+
+    void seek(double time);
+
+    void setVolume(double volume);
 
     void stop();
 }
