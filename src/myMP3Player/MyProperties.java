@@ -21,6 +21,7 @@ public class MyProperties {
     private final static String configFile = "config.properties";
     private final static String pathToConfig = "src/myMP3Player/Resources";
 
+    private final static  String defaultAudioOutput = "";
     private final static  String defaultFormats = "*.mp3, *.wav";
     private final static  String defaultMasterVolume = "100.0";
     private final static  String defaultPathToMusic = "";
@@ -47,7 +48,7 @@ public class MyProperties {
     public void load() {
         map = UtilsProperties.readProperties(pathToConfig, configFile);
 
-        String mixerName = map.getOrDefault(AUDIO_OUTPUT,"");
+        String mixerName = map.getOrDefault(AUDIO_OUTPUT,defaultAudioOutput);
         if (mixerName.isEmpty()) {
             // set default output with getMixer(null)
             setAudioOutput(AudioSystem.getMixer(null).getMixerInfo());
