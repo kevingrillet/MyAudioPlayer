@@ -32,11 +32,6 @@ public class UtilsProperties {
 
             properties.forEach((key, value) -> map.put(key.toString(), value.toString()));
 
-//            map.put("masterVolume", properties.getProperty("masterVolume", "100.0"));
-//            map.put("audioOutput", properties.getProperty("audioOutput", ""));
-//            map.put("pathToMusic", properties.getProperty("pathToMusic", ""));
-//            map.put("formats", properties.getProperty("formats", "*.mp3,*.wav"));
-
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -56,12 +51,6 @@ public class UtilsProperties {
                 String value = entry.getValue();
                 properties.setProperty(key, value);
             }
-
-            // Just for info
-//            properties.setProperty("masterVolume", map.get("masterVolume"));
-//            properties.setProperty("audioOutput", map.get("audioOutput"));
-//            properties.setProperty("pathToMusic", map.get("pathToMusic"));
-//            properties.setProperty("formats", map.get("formats"));
 
             properties.store(outputStream, null);
         } catch (IOException io) {
