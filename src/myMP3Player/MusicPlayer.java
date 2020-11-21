@@ -14,11 +14,11 @@ import java.util.Queue;
 /**
  * My Music Player
  */
-public class MusicPlayer implements MyAudioPlayer{
+public class MusicPlayer implements MyAudioPlayer {
 
+    private final Queue<String> musics;
     private ObservableDoubleValue time;
     private Clip clip;
-    private final Queue<String> musics;
     private File currentMusic;
     private long pauseTime;
     private MusicPlayer.Status status;
@@ -26,6 +26,7 @@ public class MusicPlayer implements MyAudioPlayer{
 
     /**
      * Default constructor
+     *
      * @param mixerInfo (Mixer.Info) : Mixer info of the output port wanted
      */
     public MusicPlayer(Mixer.Info mixerInfo, Bean bean) throws LineUnavailableException {
@@ -35,7 +36,7 @@ public class MusicPlayer implements MyAudioPlayer{
         duration = 0l;
         clip = AudioSystem.getClip(mixerInfo);
         time = Bindings.createDoubleBinding(() -> ((double) clip.getMicrosecondPosition()));
-        time.addListener( t -> bean.setTime(time.get()));
+        time.addListener(t -> bean.setTime(time.get()));
         bean.timeProperty().addListener(t -> seek(bean.getTime()));
     }
 
@@ -46,6 +47,22 @@ public class MusicPlayer implements MyAudioPlayer{
         this(AudioSystem.getMixer(null).getMixerInfo(), bean);
     }
 
+    private static long getDurationFile(File file) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+            AudioFormat format = audioInputStream.getFormat();
+            long audioFileLength = file.length();
+            int frameSize = format.getFrameSize();
+            float frameRate = format.getFrameRate();
+            float durationInSeconds = (audioFileLength / (frameSize * frameRate));
+            return (long) durationInSeconds * 1000;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return 0l;
+        }
+    }
+
     @Override
     public void add(String path) {
         musics.add(path);
@@ -53,17 +70,18 @@ public class MusicPlayer implements MyAudioPlayer{
 
     /**
      * Add music to the listening queue
+     *
      * @param paths (Collection<String>) : Collection of paths to the musics
      */
     @Override
-    public void addAll(Collection<String> paths){
+    public void addAll(Collection<String> paths) {
         this.musics.addAll(paths);
     }
 
     /**
      * Change output mixer
      */
-    public void changeOutput(Mixer.Info mixerInfo){
+    public void changeOutput(Mixer.Info mixerInfo) {
         pause();
         Clip tmp = clip;
         try {
@@ -71,24 +89,25 @@ public class MusicPlayer implements MyAudioPlayer{
             if (status != Status.NOTSTART) {
                 clip.open(AudioSystem.getAudioInputStream(currentMusic));
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println(e.getMessage());
             clip = tmp;
         }
         resume();
     }
 
-    public String getMediaName(){
+    public String getMediaName() {
         Media media = new Media(currentMusic.toURI().toString());
         String name = currentMusic.getName().substring(0, currentMusic.getName().length() - 4);
         Object o = media.getMetadata().getOrDefault("title", null);
         return o == null ? name : o.toString();
     }
+
     /**
      * Play the music, resume if paused
      */
     @Override
-    public void play(){
+    public void play() {
         if (!musics.isEmpty() && currentMusic == null) {
             try {
                 currentMusic = new File(musics.poll());
@@ -98,11 +117,11 @@ public class MusicPlayer implements MyAudioPlayer{
                 System.out.println(e.getMessage());
             }
         }
-        if (currentMusic != null){
-            if(status == Status.NOTSTART || status == Status.STOPPED) {
+        if (currentMusic != null) {
+            if (status == Status.NOTSTART || status == Status.STOPPED) {
                 clip.start();
                 status = Status.PLAYING;
-            } else if (status == Status.PAUSED){
+            } else if (status == Status.PAUSED) {
                 resume();
             }
         }
@@ -120,13 +139,12 @@ public class MusicPlayer implements MyAudioPlayer{
         }
     }
 
-
     /**
      * Stop music
      */
     @Override
-    public void stop(){
-        if(currentMusic != null){
+    public void stop() {
+        if (currentMusic != null) {
             clip.stop();
             pauseTime = 0l;
             status = Status.STOPPED;
@@ -137,8 +155,8 @@ public class MusicPlayer implements MyAudioPlayer{
      * Pause music
      */
     @Override
-    public void pause(){
-        if (currentMusic != null && status == Status.PLAYING){
+    public void pause() {
+        if (currentMusic != null && status == Status.PLAYING) {
             pauseTime = clip.getMicrosecondPosition();
             clip.stop();
             status = Status.PAUSED;
@@ -148,8 +166,8 @@ public class MusicPlayer implements MyAudioPlayer{
     /**
      * Resume music
      */
-    public void resume(){
-        if (currentMusic != null && status == Status.PAUSED){
+    public void resume() {
+        if (currentMusic != null && status == Status.PAUSED) {
             clip.setMicrosecondPosition(pauseTime);
             clip.start();
             status = Status.PLAYING;
@@ -160,8 +178,8 @@ public class MusicPlayer implements MyAudioPlayer{
      * Play the next music
      */
     @Override
-    public void next(){
-        if (musics.isEmpty()){
+    public void next() {
+        if (musics.isEmpty()) {
             stop();
             clip.close();
             currentMusic = null;
@@ -170,7 +188,7 @@ public class MusicPlayer implements MyAudioPlayer{
                 currentMusic = new File(musics.poll());
                 clip.close();
                 clip.open(AudioSystem.getAudioInputStream(currentMusic));
-            } catch (Exception e){
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
                 clip.stop();
             }
@@ -182,14 +200,16 @@ public class MusicPlayer implements MyAudioPlayer{
 
     /**
      * Get the current time
+     *
      * @return (double): current time in milliseconds
      */
-    public double getTime(){
+    public double getTime() {
         return clip.getMicrosecondPosition();
     }
 
     /**
      * Get End time
+     *
      * @return (double): end time in milliseconds
      */
     public double getDuration() {
@@ -203,6 +223,7 @@ public class MusicPlayer implements MyAudioPlayer{
 
     /**
      * Tells if a music has ended
+     *
      * @return (if the current music has ended)
      */
     public boolean hasEnded() {
@@ -211,6 +232,7 @@ public class MusicPlayer implements MyAudioPlayer{
 
     /**
      * Return current status
+     *
      * @return (MusicPlayer.Status) : current status
      */
     public Status getStatus() {
@@ -219,9 +241,10 @@ public class MusicPlayer implements MyAudioPlayer{
 
     /**
      * Go to time position
+     *
      * @param time (long): time in milliseconds
      */
-    public void seek(double time){
+    public void seek(double time) {
         clip.setMicrosecondPosition((long) time);
     }
 
@@ -230,40 +253,24 @@ public class MusicPlayer implements MyAudioPlayer{
 
     }
 
-    /**
-     * Value between 0 and 1
-     * @param volume (double): volume between 0 and 1
-     */
-    public void setVolume(double volume){
-        assert (volume >= 0 && volume <= 1);
-        //FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
-        //gainControl.setValue((20f *  (float) Math.log10(volume)));
-    }
-
-    public double getVolume(){
+    public double getVolume() {
         if (clip != null) {
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
             return gainControl.getValue();
-        }else {
+        } else {
             return -1f;
         }
     }
 
-
-    private static long getDurationFile(File file) {
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
-            AudioFormat format = audioInputStream.getFormat();
-            long audioFileLength = file.length();
-            int frameSize = format.getFrameSize();
-            float frameRate = format.getFrameRate();
-            float durationInSeconds = (audioFileLength / (frameSize * frameRate));
-            return (long) durationInSeconds*1000;
-
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-            return 0l;
-        }
+    /**
+     * Value between 0 and 1
+     *
+     * @param volume (double): volume between 0 and 1
+     */
+    public void setVolume(double volume) {
+        assert (volume >= 0 && volume <= 1);
+        //FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+        //gainControl.setValue((20f *  (float) Math.log10(volume)));
     }
 
     enum Status {

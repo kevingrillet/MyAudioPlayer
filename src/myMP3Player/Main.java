@@ -24,22 +24,5 @@ public class Main extends Application {
         primaryStage.setTitle("MyMP3Player");
         primaryStage.setScene(new Scene(root/*, 300, 275*/));
         primaryStage.show();
-
-
-
-        /*MusicPlayer musicPlayer = new MusicPlayer();
-        FileChooser fileChooser = new FileChooser();
-        List<File> fileList = fileChooser.showOpenMultipleDialog(null);
-        musicPlayer.addMusic(fileList.stream().map(e -> e.getPath()).collect(Collectors.toList()));
-
-        musicPlayer.play();
-        TimeUnit.SECONDS.sleep(2);
-        musicPlayer.setVolume(1);
-        TimeUnit.SECONDS.sleep(2);
-        musicPlayer.setVolume(0.1f);
-        TimeUnit.SECONDS.sleep(2);
-        musicPlayer.setVolume(0.5f);*/
-
-
     }
 }

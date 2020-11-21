@@ -13,11 +13,13 @@ import java.util.List;
 
 public class MyMediaPlayer implements MyAudioPlayer {
     private final static String formats = "*.aif, *.aiff, *.aifc, *.m4a, *.mp3, *.wav, *.WAV";
+    private final Bean bean;
     private final List<String> queue;
     private MediaPlayer mediaPlayer;
 
-    public MyMediaPlayer() {
+    public MyMediaPlayer(Bean bean) {
         queue = new LinkedList<>();
+        this.bean = bean;
     }
 
     @Override
@@ -145,15 +147,14 @@ public class MyMediaPlayer implements MyAudioPlayer {
         Media media = new Media(new File(queue.get(0)).toURI().toString());
 
         mediaPlayer = new MediaPlayer(media);
-        // TODO refresh interface
-//        mediaPlayer.currentTimeProperty().addListener(observable -> updateTimeValue());
-//        mediaPlayer.setOnReady(observable -> updateTimeValue());
+        mediaPlayer.currentTimeProperty().addListener(observable -> bean.setTime(getTime()));
+        mediaPlayer.setOnReady(() -> bean.setTime(getTime()));
         mediaPlayer.setOnEndOfMedia(() -> {
             mediaPlayer.stop();
             mediaPlayer.seek(new Duration(0));
             queue.remove(0);
             // TODO refresh interface
-//            listViewPlaylist.getItems().remove(0);
+            bean.getQueue().remove(0);
             if (queue.size() > 0) {
                 setMedia();
                 mediaPlayer.play();

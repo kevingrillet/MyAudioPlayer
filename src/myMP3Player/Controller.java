@@ -25,10 +25,9 @@ import java.util.List;
  * Heart link to MyMP3Player.fxml
  */
 public class Controller {
-    private MyProperties myProperties;
-    private MusicPlayer myAudioPlayer;
     private final Bean bean = new Bean();
-
+    private MyProperties myProperties;
+    private MyAudioPlayer myAudioPlayer;
     @FXML // fx:id="comboAudioOutput"
     private ComboBox<String> comboAudioOutput; // Value injected by FXMLLoader
 
@@ -82,6 +81,7 @@ public class Controller {
                 if (fileList != null) {
                     for (File file : fileList) {
                         if (file != null) {
+                            bean.getQueue().add(file.toString());
                             myAudioPlayer.add(file.toString());
                             listViewPlaylist.getItems().add(file.getName());
                             myProperties.setPathToMusic(Paths.get(file.toURI()).getParent());
@@ -147,11 +147,7 @@ public class Controller {
         assert sliderMasterVolume != null : "fx:id=\"sliderMasterVolume\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
         assert sliderPlayerTime != null : "fx:id=\"sliderPlayerTime\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
 
-        try {
-            myAudioPlayer = new MusicPlayer(bean);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        myAudioPlayer = new MyMediaPlayer(bean);
 
         /*______ AUDIO OUTPUT ______*/
         // How to get list of AudioOutput.
@@ -188,13 +184,6 @@ public class Controller {
             bean.setTime(myAudioPlayer.getDuration() * sliderPlayerTime.getValue() / 100.0);
         });
         bean.timeProperty().addListener(o -> updateTimeValue());
-        bean.timeProperty().addListener(o -> System.out.println(bean.getTime()));
-
-             /*   .addListener(observable -> {
-            if (sliderPlayerTime.isValueChanging()) {
-                myAudioPlayer.seek(myAudioPlayer.getDuration() * (sliderPlayerTime.getValue() / 100.0));
-            }
-        });*/
         /*______ TIME SLIDER ______*/
 
         /*______ LOAD PROPERTIES _____*/
