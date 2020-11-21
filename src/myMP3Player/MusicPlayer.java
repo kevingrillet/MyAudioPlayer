@@ -43,7 +43,7 @@ public class MusicPlayer {
 
     /**
      * Add music to the listening queue
-     * @param musics (String[]) : Array of path to the musics
+     * @param musics (Collection<String>) : Collection of paths to the musics
      */
     public void addMusic(Collection<String> musics){
         this.musics.addAll(musics);
@@ -145,9 +145,18 @@ public class MusicPlayer {
 
     /**
      * Get the current time
+     * @return (long): current time in milliseconds
      */
     public long getTime(){
         return clip.getMicrosecondPosition();
+    }
+
+    /**
+     * Get End time
+     * @return (long): end time in milliseconds
+     */
+    public long getEndTime() {
+        return duration;
     }
 
     /**
@@ -180,6 +189,7 @@ public class MusicPlayer {
         FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
         gainControl.setValue(20f * (float) Math.log10(v));
     }
+
 
 
     private static long getDuration(File file) {
