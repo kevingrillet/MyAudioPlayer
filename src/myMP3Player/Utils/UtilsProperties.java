@@ -1,9 +1,7 @@
 package myMP3Player.Utils;
 
 import java.io.*;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class UtilsProperties {
     final private static String pathToConfig = "src/myMP3Player/Resources/config.properties";
@@ -53,6 +51,7 @@ public class UtilsProperties {
                 properties.setProperty(key, value);
             }
 
+            // Just for info
 //            properties.setProperty("masterVolume", map.get("masterVolume"));
 //            properties.setProperty("audioOutput", map.get("audioOutput"));
 //            properties.setProperty("pathToMusic", map.get("pathToMusic"));
@@ -62,5 +61,9 @@ public class UtilsProperties {
         } catch (IOException io) {
             io.printStackTrace();
         }
+    }
+
+    public static List<String> readFormats(String formatsProperty) {
+        return Arrays.asList(formatsProperty.split(","));
     }
 }
