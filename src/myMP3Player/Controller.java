@@ -70,7 +70,8 @@ public class Controller {
                 if (!(mediaPlayer == null)) {
                     if ( mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
                         mediaPlayer.pause();
-                    }}
+                    }
+                }
                 break;
             case "buttonPlayerPlay":
                 if (!(mediaPlayer == null)) {
@@ -78,7 +79,28 @@ public class Controller {
                             || mediaPlayer.getStatus() == MediaPlayer.Status.READY
                             || mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
                         mediaPlayer.play();
-                    }}
+                    }
+                }
+                break;
+            case "buttonPlayerNext":
+                if (!(mediaPlayer == null)) {
+                    if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING
+                            || mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED
+                            || mediaPlayer.getStatus() == MediaPlayer.Status.READY
+                            || mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
+                        mediaPlayer.seek(mediaPlayer.getTotalDuration());
+                    }
+                }
+                break;
+            case "buttonPlayerPrevious":
+                if (!(mediaPlayer == null)) {
+                    if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING
+                            || mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED
+                            || mediaPlayer.getStatus() == MediaPlayer.Status.READY
+                            || mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
+                        mediaPlayer.seek(new Duration(0));
+                    }
+                }
                 break;
             case "buttonPlaylistAdd":
                 FileChooser fileChooser = new FileChooser();

@@ -61,6 +61,8 @@
                      <Button id="buttonPlayerStop" mnemonicParsing="false" onAction="#handleButtonAction" text="⏹" />
                      <Button id="buttonPlayerPlay" mnemonicParsing="false" onAction="#handleButtonAction" text="▶" />
                      <Button id="buttonPlayerPause" mnemonicParsing="false" onAction="#handleButtonAction" text="⏸" />
+                     <Button id="buttonPlayerPrevious" mnemonicParsing="false" onAction="#handleButtonAction" text="⏮" />
+                     <Button id="buttonPlayerNext" mnemonicParsing="false" onAction="#handleButtonAction" text="⏭" />
                   </HBox>
                </top>
             </BorderPane>
