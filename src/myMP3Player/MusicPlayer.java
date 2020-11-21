@@ -1,8 +1,9 @@
 package myMP3Player;
 
-import javafx.beans.binding.Bindings;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ObservableDoubleValue;
 import javafx.scene.media.Media;
+import myMP3Player.Utils.UtilsProperties;
 
 import javax.sound.sampled.*;
 import java.io.File;
@@ -16,6 +17,7 @@ import java.util.Queue;
  */
 public class MusicPlayer implements MyAudioPlayer{
 
+    private final static String formats = "*.aif, *.aiff, *.aifc, *.wav, *.WAV";
     private ObservableDoubleValue time;
     private Clip clip;
     private final Queue<String> musics;
@@ -34,7 +36,7 @@ public class MusicPlayer implements MyAudioPlayer{
         status = Status.NOTSTART;
         duration = 0l;
         clip = AudioSystem.getClip(mixerInfo);
-        time = Bindings.createDoubleBinding(() -> ((double) clip.getMicrosecondPosition()));
+        time = new SimpleDoubleProperty((double) clip.getMicrosecondLength()); //TODO
         time.addListener( t -> bean.setTime(time.get()));
         bean.timeProperty().addListener(t -> seek(bean.getTime()));
     }
@@ -198,7 +200,7 @@ public class MusicPlayer implements MyAudioPlayer{
 
     @Override
     public List<String> getFormats() {
-        return null;
+        return UtilsProperties.readFormats(formats);
     }
 
     /**
@@ -209,13 +211,6 @@ public class MusicPlayer implements MyAudioPlayer{
         return clip.getMicrosecondPosition() >= duration;
     }
 
-    /**
-     * Return current status
-     * @return (MusicPlayer.Status) : current status
-     */
-    public Status getStatus() {
-        return status;
-    }
 
     /**
      * Go to time position
