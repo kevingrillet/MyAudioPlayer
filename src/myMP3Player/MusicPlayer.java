@@ -46,11 +46,11 @@ public class MusicPlayer implements MyAudioPlayer{
 
     /**
      * Add music to the listening queue
-     * @param musics (Collection<String>) : Collection of paths to the musics
+     * @param paths (Collection<String>) : Collection of paths to the paths
      */
     @Override
-    public void addAll(Collection<String> musics){
-        this.musics.addAll(musics);
+    public void addAll(Collection<String> paths){
+        this.musics.addAll(paths);
     }
 
     /**
@@ -175,7 +175,7 @@ public class MusicPlayer implements MyAudioPlayer{
 
     /**
      * Get the current time
-     * @return (long): current time in milliseconds
+     * @return (double): current time in milliseconds
      */
     public double getTime(){
         return clip.getMicrosecondPosition();
@@ -183,7 +183,7 @@ public class MusicPlayer implements MyAudioPlayer{
 
     /**
      * Get End time
-     * @return (long): end time in milliseconds
+     * @return (double): end time in milliseconds
      */
     public double getDuration() {
         return duration;
@@ -215,12 +215,12 @@ public class MusicPlayer implements MyAudioPlayer{
 
     /**
      * Value between 0 and 1
-     * @param v (double): volume between 0 and 1
+     * @param volume (double): volume between 0 and 1
      */
-    public void setVolume(double v){
-        assert (v >= 0 && v <= 1);
+    public void setVolume(double volume){
+        assert (volume >= 0 && volume <= 1);
         FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue((20f *  (float) Math.log10(v)));
+        gainControl.setValue((20f *  (float) Math.log10(volume)));
     }
 
     public double getVolume(){
