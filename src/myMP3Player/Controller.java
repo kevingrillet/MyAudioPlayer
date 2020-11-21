@@ -22,6 +22,7 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -85,25 +86,27 @@ public class Controller {
                 break;
             case "buttonPlaylistAdd":
                 FileChooser fileChooser = new FileChooser();
-//                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("*.mp3"));
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Files", Arrays.asList(mapProperties.get("formats").split(","))));
                 if (!path.toString().isEmpty()) {
                     fileChooser.setInitialDirectory(new File(path.toString()));
                 }
                 List<File> fileList = fileChooser.showOpenMultipleDialog(null);
-                for (File file : fileList){
-                    if (file != null) {
-                        path = Paths.get(file.toURI());
-                        path = path.getParent();
+                if (fileList != null) {
+                    for (File file : fileList) {
+                        if (file != null) {
+                            path = Paths.get(file.toURI());
+                            path = path.getParent();
 
-                        listPath.add(file.toString());
-                        listViewPlaylist.getItems().add(file.getName());
+                            listPath.add(file.toString());
+                            listViewPlaylist.getItems().add(file.getName());
 //                        setMedia(file);
 
-                        mapProperties.replace("pathToMusic", path.toString());
-                        UtilsProperties.writeProperties(mapProperties);
+                            mapProperties.replace("pathToMusic", path.toString());
+                            UtilsProperties.writeProperties(mapProperties);
+                        }
                     }
+                    setMedia(new File(listPath.get(0)));
                 }
-                setMedia(new File(listPath.get(0)));
                 break;
             case "buttonPlaylistRemove":
                 if (listViewPlaylist.getSelectionModel().getSelectedIndex()>=0){
