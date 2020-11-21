@@ -11,18 +11,18 @@ import javafx.stage.Stage;
  */
 public class Main extends Application {
 
+    /**
+     * @param args launch arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("MyMP3Player.fxml"));
         primaryStage.setTitle("MyMP3Player");
         primaryStage.setScene(new Scene(root/*, 300, 275*/));
         primaryStage.show();
-    }
-
-    /**
-     * @param args launch arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
     }
 }
