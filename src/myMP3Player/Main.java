@@ -4,21 +4,22 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-
 /**
- *  Main of MyMP3Player
+ * Main of MyMP3Player
  */
 public class Main extends Application {
 
+    /**
+     * @param args launch arguments
+     */
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
-    public void start(Stage primaryStage) throws Exception{
+    public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("MyMP3Player.fxml"));
         primaryStage.setTitle("MyMP3Player");
         primaryStage.setScene(new Scene(root/*, 300, 275*/));
@@ -40,13 +41,5 @@ public class Main extends Application {
         musicPlayer.setVolume(0.5f);*/
 
 
-    }
-
-    /**
-     *
-     * @param args launch arguments
-     */
-    public static void main(String[] args) {
-        launch(args);
     }
 }

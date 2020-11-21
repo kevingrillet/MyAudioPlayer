@@ -100,6 +100,8 @@ public class Controller {
                     }
                 }
                 break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + id);
         }
     }
 

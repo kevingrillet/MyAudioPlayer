@@ -70,6 +70,14 @@ public class MyMediaPlayer implements MyAudioPlayer {
     }
 
     @Override
+    public void setVolume(double volume) {
+        assert (volume >= 0 && volume <= 1);
+        if (!(mediaPlayer == null)) {
+            mediaPlayer.setVolume(volume);
+        }
+    }
+
+    @Override
     public void next() {
         if (!(mediaPlayer == null)) {
             if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING
@@ -144,15 +152,6 @@ public class MyMediaPlayer implements MyAudioPlayer {
                 mediaPlayer.play();
             }
         });
-        /*______ MEDIA PLAYER ______*/
-    }
-
-    @Override
-    public void setVolume(double volume) {
-        assert (volume >= 0 && volume <= 1);
-        if (!(mediaPlayer == null)) {
-            mediaPlayer.setVolume(volume);
-        }
     }
 
     @Override
