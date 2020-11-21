@@ -3,19 +3,19 @@ package myMP3Player;
 import java.util.Collection;
 
 public interface MyAudioPlayer {
-    public void add(String path);
+    void add(String path);
 
-    public void addAll(Collection<String> paths);
+    void addAll(Collection<String> paths);
 
-    public void next();
+    void next();
 
-    public void pause();
+    void pause();
 
-    public void play();
+    void play();
 
-    public void previous();
+    void previous();
 
-    public void remove(int index);
+    void remove(int index);
 
-    public void stop();
+    void stop();
 }
