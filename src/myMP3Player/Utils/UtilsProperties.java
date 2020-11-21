@@ -26,7 +26,7 @@ public class UtilsProperties {
             }
         }
 
-        try (InputStream inputStream = new FileInputStream("pathToConfig" + "/" + "configFile")) {
+        try (InputStream inputStream = new FileInputStream(pathToConfig + "/" + configFile)) {
 //        try (InputStream inputStream = Main.class.getClassLoader().getResourceAsStream ("Resources/config.properties")) {
             Properties properties = new Properties();
             properties.load(inputStream);

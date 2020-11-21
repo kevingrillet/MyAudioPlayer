@@ -1,7 +1,6 @@
 package myMP3Player;
 
 import javafx.collections.FXCollections;
-import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -10,8 +9,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import myMP3Player.Utils.UtilsDateTime;
@@ -22,17 +19,14 @@ import javax.sound.sampled.Mixer;
 import javax.sound.sampled.SourceDataLine;
 import java.io.File;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Heart link to MyMP3Player.fxml
  */
 public class Controller {
-    private Duration duration;
-    private List<String> listPath;
     private MyProperties myProperties;
-    private MediaPlayer mediaPlayer;
+    private MyAudioPlayer myAudioPlayer;
 
     @FXML // fx:id="comboAudioOutput"
     private ComboBox<String> comboAudioOutput; // Value injected by FXMLLoader
@@ -62,48 +56,19 @@ public class Controller {
         String id = ((Node) event.getSource()).getId();
         switch (id) {
             case "buttonPlayerStop":
-                if (!(mediaPlayer == null)) {
-                    if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-                        mediaPlayer.stop();
-                        mediaPlayer.seek(mediaPlayer.getStartTime());
-                    }
-                }
+                myAudioPlayer.stop();
                 break;
             case "buttonPlayerPause":
-                if (!(mediaPlayer == null)) {
-                    if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING) {
-                        mediaPlayer.pause();
-                    }
-                }
+                myAudioPlayer.pause();
                 break;
             case "buttonPlayerPlay":
-                if (!(mediaPlayer == null)) {
-                    if (mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED
-                            || mediaPlayer.getStatus() == MediaPlayer.Status.READY
-                            || mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
-                        mediaPlayer.play();
-                    }
-                }
+                myAudioPlayer.play();
                 break;
             case "buttonPlayerNext":
-                if (!(mediaPlayer == null)) {
-                    if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING
-                            || mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED
-                            || mediaPlayer.getStatus() == MediaPlayer.Status.READY
-                            || mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
-                        mediaPlayer.seek(mediaPlayer.getTotalDuration());
-                    }
-                }
+                myAudioPlayer.next();
                 break;
             case "buttonPlayerPrevious":
-                if (!(mediaPlayer == null)) {
-                    if (mediaPlayer.getStatus() == MediaPlayer.Status.PLAYING
-                            || mediaPlayer.getStatus() == MediaPlayer.Status.PAUSED
-                            || mediaPlayer.getStatus() == MediaPlayer.Status.READY
-                            || mediaPlayer.getStatus() == MediaPlayer.Status.STOPPED) {
-                        mediaPlayer.seek(new Duration(0));
-                    }
-                }
+                myAudioPlayer.previous();
                 break;
             case "buttonPlaylistAdd":
                 FileChooser fileChooser = new FileChooser();
@@ -115,26 +80,24 @@ public class Controller {
                 if (fileList != null) {
                     for (File file : fileList) {
                         if (file != null) {
-                            listPath.add(file.toString());
+                            myAudioPlayer.add(file.toString());
                             listViewPlaylist.getItems().add(file.getName());
                             myProperties.setPathToMusic(Paths.get(file.toURI()).getParent());
                         }
                     }
-                    setMedia(new File(listPath.get(0)));
+                    myAudioPlayer.setMedia();
                 }
                 break;
             case "buttonPlaylistRemove":
                 if (listViewPlaylist.getSelectionModel().getSelectedIndex() >= 0) {
+                    myAudioPlayer.remove(listViewPlaylist.getSelectionModel().getSelectedIndex());
+                    listViewPlaylist.getItems().remove(listViewPlaylist.getSelectionModel().getSelectedIndex());
                     if (listViewPlaylist.getSelectionModel().getSelectedIndex() == 0) {
-                        if (!(mediaPlayer == null)) {
-                            mediaPlayer.stop();
-                            if (listViewPlaylist.getItems().size() > 1) {
-                                setMedia(new File(listPath.get(1)));
-                            }
+                        myAudioPlayer.stop();
+                        if (listViewPlaylist.getItems().size() > 1) {
+                            myAudioPlayer.setMedia();
                         }
                     }
-                    listPath.remove(listViewPlaylist.getSelectionModel().getSelectedIndex());
-                    listViewPlaylist.getItems().remove(listViewPlaylist.getSelectionModel().getSelectedIndex());
                 }
                 break;
         }
@@ -180,7 +143,7 @@ public class Controller {
         assert sliderMasterVolume != null : "fx:id=\"sliderMasterVolume\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
         assert sliderPlayerTime != null : "fx:id=\"sliderPlayerTime\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
 
-        listPath = new ArrayList<>();
+        myAudioPlayer = new MyMediaPlayer();
 
         /*______ AUDIO OUTPUT ______*/
         // How to get list of AudioOutput.
@@ -203,6 +166,23 @@ public class Controller {
         // Play: https://stackoverflow.com/questions/37609430/play-sound-on-specific-sound-device-java
         /*______ AUDIO OUTPUT ______*/
 
+        /*______ MASTER LEVEL ______*/
+        myAudioPlayer.setVolume(sliderMasterVolume.getValue() / 100.0);
+
+        sliderMasterVolume.valueProperty().addListener(observable -> {
+            myAudioPlayer.setVolume(sliderMasterVolume.getValue() / 100.0);
+            myProperties.setMasterVolume(sliderMasterVolume.getValue());
+        });
+        /*______ MASTER LEVEL ______*/
+
+        /*______ TIME SLIDER ______*/
+        sliderPlayerTime.valueProperty().addListener(observable -> {
+            if (sliderPlayerTime.isValueChanging()) {
+                myAudioPlayer.seek(myAudioPlayer.getDuration() * (sliderPlayerTime.getValue() / 100.0));
+            }
+        });
+        /*______ TIME SLIDER ______*/
+
         /*______ LOAD PROPERTIES _____*/
         myProperties = new MyProperties();
         sliderMasterVolume.setValue((myProperties.getMasterVolume()));
@@ -212,78 +192,11 @@ public class Controller {
     }
 
     /**
-     * @param file MediaFile to Read
-     */
-    private void setMedia(File file) {
-        /*______ MEDIA PLAYER ______*/
-        // https://docs.oracle.com/javafx/2/media/playercontrol.htm
-
-        Media media = new Media(file.toURI().toString());
-        labelPlayerName.setText("");
-        media.getMetadata().addListener((MapChangeListener.Change<? extends String, ?> c) -> {
-            if (c.wasAdded()) {
-                if ("title".equals(c.getKey())) {
-                    labelPlayerName.setText(c.getValueAdded().toString());
-                }
-//                else if ("artist".equals(c.getKey())){
-//                    System.out.println(c.getValueAdded().toString());
-//                }else if ("album".equals(c.getKey())){
-//                    System.out.println(c.getValueAdded().toString());
-//                }
-            }
-        });
-        if (labelPlayerName.getText().isEmpty()) {
-            String title = media.getSource();
-            title = title.substring(0, title.length() - ".mp3".length());
-            title = title.substring(title.lastIndexOf("/") + 1).replaceAll("%20", " ");
-            labelPlayerName.setText(title);
-        }
-
-        mediaPlayer = new MediaPlayer(media);
-        mediaPlayer.currentTimeProperty().addListener(observable -> updateTimeValue());
-        mediaPlayer.setOnReady(() -> {
-            duration = mediaPlayer.getMedia().getDuration();
-            updateTimeValue();
-        });
-        mediaPlayer.setOnEndOfMedia(() -> {
-            mediaPlayer.stop();
-            mediaPlayer.seek(new Duration(0));
-            listPath.remove(0);
-            listViewPlaylist.getItems().remove(0);
-            if (listViewPlaylist.getItems().size() > 0) {
-                setMedia(new File(listPath.get(0)));
-                mediaPlayer.play();
-            }
-        });
-        /*______ MEDIA PLAYER ______*/
-
-        /*______ MASTER LEVEL ______*/
-        mediaPlayer.setVolume(sliderMasterVolume.getValue() / 100.0);
-
-        sliderMasterVolume.valueProperty().addListener(observable -> {
-            if (mediaPlayer != null) {
-                mediaPlayer.setVolume(sliderMasterVolume.getValue() / 100.0);
-                myProperties.setMasterVolume(sliderMasterVolume.getValue());
-            }
-        });
-        /*______ MASTER LEVEL ______*/
-
-        /*______ TIME SLIDER ______*/
-        sliderPlayerTime.valueProperty().addListener(observable -> {
-            if (sliderPlayerTime.isValueChanging()) {
-                if (mediaPlayer != null) {
-                    mediaPlayer.seek(duration.multiply(sliderPlayerTime.getValue() / 100.0));
-                }
-            }
-        });
-        /*______ TIME SLIDER ______*/
-    }
-
-    /**
      * Update Media time Label & Slider
      */
-    private void updateTimeValue() {
-        Duration currentTime = mediaPlayer.getCurrentTime();
+    public void updateTimeValue() {
+        Duration duration = new Duration(myAudioPlayer.getDuration());
+        Duration currentTime = new Duration(myAudioPlayer.getTime());
         labelPlayerTime.setText(UtilsDateTime.formatTime(currentTime, duration));
         sliderPlayerTime.setDisable(duration.isUnknown());
         if (!sliderPlayerTime.isDisabled()

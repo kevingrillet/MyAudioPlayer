@@ -1,15 +1,17 @@
 package myMP3Player;
 
+import javafx.collections.MapChangeListener;
+import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
 public class MyMediaPlayer implements MyAudioPlayer {
     private final List<String> queue;
-    private long duration;
     private MediaPlayer mediaPlayer;
 
     public MyMediaPlayer() {
@@ -30,6 +32,28 @@ public class MyMediaPlayer implements MyAudioPlayer {
     public double getDuration() {
         return mediaPlayer.getTotalDuration().toMillis();
     }
+
+    @Override
+    public String getMediaName() {
+        if (!(mediaPlayer == null)) {
+            String title = mediaPlayer.getMedia().getSource();
+            title = title.substring(0, title.length() - ".mp3".length());
+            title = title.substring(title.lastIndexOf("/") + 1).replaceAll("%20", " ");
+            // TODO Find how to get title out of the listener.
+            mediaPlayer.getMedia().getMetadata().addListener((MapChangeListener.Change<? extends String, ?> c) -> {
+                if (c.wasAdded()) {
+                    if ("title".equals(c.getKey())) {
+                        System.out.println(c.getValueAdded().toString());
+//                        title = c.getValueAdded().toString();
+                    }
+                }
+            });
+            return title;
+        } else {
+            return null;
+        }
+    }
+
 
     @Override
     public double getTime() {
@@ -99,6 +123,28 @@ public class MyMediaPlayer implements MyAudioPlayer {
         if (!(mediaPlayer == null)) {
             mediaPlayer.seek(new Duration(time));
         }
+    }
+
+    @Override
+    public void setMedia() {
+        Media media = new Media(new File(queue.get(0)).toURI().toString());
+
+        mediaPlayer = new MediaPlayer(media);
+        // TODO refresh interface
+//        mediaPlayer.currentTimeProperty().addListener(observable -> updateTimeValue());
+//        mediaPlayer.setOnReady(observable -> updateTimeValue());
+        mediaPlayer.setOnEndOfMedia(() -> {
+            mediaPlayer.stop();
+            mediaPlayer.seek(new Duration(0));
+            queue.remove(0);
+            // TODO refresh interface
+//            listViewPlaylist.getItems().remove(0);
+            if (queue.size() > 0) {
+                setMedia();
+                mediaPlayer.play();
+            }
+        });
+        /*______ MEDIA PLAYER ______*/
     }
 
     @Override
