@@ -12,7 +12,7 @@ import java.util.Queue;
 public class MusicPlayer {
 
     private Clip clip;
-    private Queue<String> musics;
+    private final Queue<String> musics;
     private File currentMusic;
     private long time;
     private MusicPlayer.Status status;
@@ -48,6 +48,21 @@ public class MusicPlayer {
         this.musics.addAll(Arrays.asList(musics));
     }
 
+    /**
+     * Change output mixer
+     */
+    public void changeOutput(Mixer.Info mixerInfo){
+        pause();
+        try {
+            clip = AudioSystem.getClip(mixerInfo);
+            if (status != Status.NOTSTART) {
+                clip.open(AudioSystem.getAudioInputStream(currentMusic));
+            }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        resume();
+    }
     /**
      * Play the music
      */
@@ -85,7 +100,7 @@ public class MusicPlayer {
      * Pause music
      */
     public void pause(){
-        if (currentMusic != null){
+        if (currentMusic != null && status == Status.PLAYING){
             time = clip.getMicrosecondPosition();
             clip.stop();
             status = Status.PAUSED;
@@ -96,7 +111,7 @@ public class MusicPlayer {
      * Resume music
      */
     public void resume(){
-        if (currentMusic != null){
+        if (currentMusic != null && status == Status.PAUSED){
             clip.setMicrosecondPosition(time);
             clip.start();
             status = Status.PLAYING;
@@ -109,9 +124,11 @@ public class MusicPlayer {
     public void next(){
         if (musics.isEmpty()){
             stop();
+            clip.close();
         } else {
             try {
                 currentMusic = new File(musics.poll());
+                clip.close();
                 clip.open(AudioSystem.getAudioInputStream(currentMusic));
             } catch (Exception e){
                 System.out.println(e.getMessage());
@@ -151,7 +168,6 @@ public class MusicPlayer {
 
     enum Status {
         PLAYING, STOPPED, PAUSED, NOTSTART;
-
 
     }
 }
