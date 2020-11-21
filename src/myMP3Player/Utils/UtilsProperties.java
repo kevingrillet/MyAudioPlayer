@@ -6,14 +6,14 @@ import java.nio.file.Paths;
 import java.util.*;
 
 public class UtilsProperties {
-    final private static String configFile = "config.properties";
-    final private static String pathToConfig = "src/myMP3Player/Resources";
 
     /**
-     *  Load properties on startup
+     *  Load properties
+     * @param pathToConfig Path to config file
+     * @param configFile Name of the config file
      * @return Map<String key, String value>
      */
-    public static Map<String, String> readProperties() {
+    public static Map<String, String> readProperties(String pathToConfig, String configFile) {
         Map<String, String> map = new HashMap<>();
         File file = new File(pathToConfig + "/" + configFile);
         if(!file.exists()) {
@@ -39,10 +39,12 @@ public class UtilsProperties {
     }
 
     /**
-     *  Save properties
+     * Save properties
+     * @param pathToConfig Path to config file
+     * @param configFile Name of the config file
      * @param map Map<String key, String value>
      */
-    public static void writeProperties(Map<String,String> map) {
+    public static void writeProperties(String pathToConfig, String configFile, Map<String,String> map) {
         try (OutputStream outputStream = new FileOutputStream(pathToConfig + "/" + configFile)) {
             Properties properties = new Properties();
 
@@ -58,6 +60,11 @@ public class UtilsProperties {
         }
     }
 
+    /**
+     * Format formats
+     * @param formatsProperty ex: *.mp3, *.wav
+     * @return [*.mp3; *.wav]
+     */
     public static List<String> readFormats(String formatsProperty) {
         return Arrays.asList(formatsProperty.split(","));
     }
