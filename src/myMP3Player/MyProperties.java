@@ -79,7 +79,7 @@ public class MyProperties {
     public void setFormats(List<String> formats) {
         if (this.formats == formats) return;
         this.formats = formats;
-        setInMap("formats",String.valueOf(toString()));
+        setInMap("formats", formats.stream().reduce((acc, n) -> (acc + "," + n)).get());
         if (autoSave) save();
     }
 
