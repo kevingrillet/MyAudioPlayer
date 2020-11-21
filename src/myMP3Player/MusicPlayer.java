@@ -2,7 +2,7 @@ package myMP3Player;
 
 import javax.sound.sampled.*;
 import java.io.File;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -26,6 +26,7 @@ public class MusicPlayer {
         musics = new LinkedList<>();
         currentMusic = null;
         status = Status.NOTSTART;
+        duration = 0l;
         try {
             clip = AudioSystem.getClip(mixerInfo);
         } catch (Exception e){
@@ -44,8 +45,8 @@ public class MusicPlayer {
      * Add music to the listening queue
      * @param musics (String[]) : Array of path to the musics
      */
-    public void addMusic(String[] musics){
-        this.musics.addAll(Arrays.asList(musics));
+    public void addMusic(Collection<String> musics){
+        this.musics.addAll(musics);
     }
 
     /**
@@ -64,24 +65,25 @@ public class MusicPlayer {
         resume();
     }
     /**
-     * Play the music
+     * Play the music, resume if paused
      */
     public void play(){
-        if (!musics.isEmpty()) {
-            if (currentMusic == null){
-                try {
-                    currentMusic = new File(musics.poll());
-                    clip.open(AudioSystem.getAudioInputStream(currentMusic));
-                    AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(currentMusic);
-                    duration = (long) fileFormat.getProperty("duration");
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+        if (!musics.isEmpty() && currentMusic == null) {
+            try {
+                currentMusic = new File(musics.poll());
+                clip.open(AudioSystem.getAudioInputStream(currentMusic));
+                duration = getDuration(currentMusic);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         }
-        if (currentMusic != null) {
-            clip.start();
-            status = Status.PLAYING;
+        if (currentMusic != null){
+            if(status == Status.NOTSTART || status == Status.STOPPED) {
+                clip.start();
+                status = Status.PLAYING;
+            } else if (status == Status.PAUSED){
+                resume();
+            }
         }
     }
 
@@ -125,6 +127,7 @@ public class MusicPlayer {
         if (musics.isEmpty()){
             stop();
             clip.close();
+            currentMusic = null;
         } else {
             try {
                 currentMusic = new File(musics.poll());
@@ -134,12 +137,7 @@ public class MusicPlayer {
                 System.out.println(e.getMessage());
                 clip.stop();
             }
-            try {
-                AudioFileFormat fileFormat = AudioSystem.getAudioFileFormat(currentMusic);
-                duration = (long) fileFormat.getProperty("duration");
-            } catch (Exception e){
-                System.out.println(e.getMessage());
-            }
+            duration = getDuration(currentMusic);
             stop();
             play();
         }
@@ -164,6 +162,23 @@ public class MusicPlayer {
      */
     public Status getStatus() {
         return status;
+    }
+
+
+    private static long getDuration(File file) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+            AudioFormat format = audioInputStream.getFormat();
+            long audioFileLength = file.length();
+            int frameSize = format.getFrameSize();
+            float frameRate = format.getFrameRate();
+            float durationInSeconds = (audioFileLength / (frameSize * frameRate));
+            return (long) durationInSeconds*1000;
+
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+            return 0l;
+        }
     }
 
     enum Status {
