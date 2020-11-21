@@ -18,7 +18,6 @@ import myMP3Player.Utils.UtilsDateTime;
 
 import javax.sound.sampled.*;
 import java.io.*;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -112,14 +111,9 @@ public class Controller {
                 if (fileList != null) {
                     for (File file : fileList) {
                         if (file != null) {
-                            Path path = Paths.get(file.toURI());
-                            path = path.getParent();
-
                             listPath.add(file.toString());
                             listViewPlaylist.getItems().add(file.getName());
-//                        setMedia(file);
-
-                            myProperties.setPathToMusic(path);
+                            myProperties.setPathToMusic(Paths.get(file.toURI()).getParent());
                         }
                     }
                     setMedia(new File(listPath.get(0)));
