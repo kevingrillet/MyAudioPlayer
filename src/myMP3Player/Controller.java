@@ -26,7 +26,8 @@ import java.util.List;
  */
 public class Controller {
     private MyProperties myProperties;
-    private MyAudioPlayer myAudioPlayer;
+    private MusicPlayer myAudioPlayer;
+    private final Bean bean = new Bean();
 
     @FXML // fx:id="comboAudioOutput"
     private ComboBox<String> comboAudioOutput; // Value injected by FXMLLoader
@@ -146,7 +147,11 @@ public class Controller {
         assert sliderMasterVolume != null : "fx:id=\"sliderMasterVolume\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
         assert sliderPlayerTime != null : "fx:id=\"sliderPlayerTime\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
 
-        myAudioPlayer = new MyMediaPlayer();
+        try {
+            myAudioPlayer = new MusicPlayer(bean);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
 
         /*______ AUDIO OUTPUT ______*/
         // How to get list of AudioOutput.
@@ -180,10 +185,16 @@ public class Controller {
 
         /*______ TIME SLIDER ______*/
         sliderPlayerTime.valueProperty().addListener(observable -> {
+            bean.setTime(myAudioPlayer.getDuration() * sliderPlayerTime.getValue() / 100.0);
+        });
+        bean.timeProperty().addListener(o -> updateTimeValue());
+        bean.timeProperty().addListener(o -> System.out.println(bean.getTime()));
+
+             /*   .addListener(observable -> {
             if (sliderPlayerTime.isValueChanging()) {
                 myAudioPlayer.seek(myAudioPlayer.getDuration() * (sliderPlayerTime.getValue() / 100.0));
             }
-        });
+        });*/
         /*______ TIME SLIDER ______*/
 
         /*______ LOAD PROPERTIES _____*/

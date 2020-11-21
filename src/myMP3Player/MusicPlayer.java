@@ -1,11 +1,14 @@
 package myMP3Player;
 
+import javafx.beans.binding.Bindings;
+import javafx.beans.value.ObservableDoubleValue;
 import javafx.scene.media.Media;
 
 import javax.sound.sampled.*;
 import java.io.File;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 
 /**
@@ -13,10 +16,11 @@ import java.util.Queue;
  */
 public class MusicPlayer implements MyAudioPlayer{
 
+    private ObservableDoubleValue time;
     private Clip clip;
     private final Queue<String> musics;
     private File currentMusic;
-    private long time;
+    private long pauseTime;
     private MusicPlayer.Status status;
     private long duration;
 
@@ -24,19 +28,22 @@ public class MusicPlayer implements MyAudioPlayer{
      * Default constructor
      * @param mixerInfo (Mixer.Info) : Mixer info of the output port wanted
      */
-    public MusicPlayer(Mixer.Info mixerInfo) throws LineUnavailableException {
+    public MusicPlayer(Mixer.Info mixerInfo, Bean bean) throws LineUnavailableException {
         musics = new LinkedList<>();
         currentMusic = null;
         status = Status.NOTSTART;
         duration = 0l;
         clip = AudioSystem.getClip(mixerInfo);
+        time = Bindings.createDoubleBinding(() -> ((double) clip.getMicrosecondPosition()));
+        time.addListener( t -> bean.setTime(time.get()));
+        bean.timeProperty().addListener(t -> seek(bean.getTime()));
     }
 
     /**
      * Constructor with default mixer
      */
-    public MusicPlayer() throws LineUnavailableException {
-        this(AudioSystem.getMixer(null).getMixerInfo());
+    public MusicPlayer(Bean bean) throws LineUnavailableException {
+        this(AudioSystem.getMixer(null).getMixerInfo(), bean);
     }
 
     @Override
@@ -46,11 +53,11 @@ public class MusicPlayer implements MyAudioPlayer{
 
     /**
      * Add music to the listening queue
-     * @param musics (Collection<String>) : Collection of paths to the musics
+     * @param paths (Collection<String>) : Collection of paths to the musics
      */
     @Override
-    public void addAll(Collection<String> musics){
-        this.musics.addAll(musics);
+    public void addAll(Collection<String> paths){
+        this.musics.addAll(paths);
     }
 
     /**
@@ -71,7 +78,7 @@ public class MusicPlayer implements MyAudioPlayer{
         resume();
     }
 
-    public String getName(){
+    public String getMediaName(){
         Media media = new Media(currentMusic.toURI().toString());
         String name = currentMusic.getName().substring(0, currentMusic.getName().length() - 4);
         Object o = media.getMetadata().getOrDefault("title", null);
@@ -121,7 +128,7 @@ public class MusicPlayer implements MyAudioPlayer{
     public void stop(){
         if(currentMusic != null){
             clip.stop();
-            time = 0l;
+            pauseTime = 0l;
             status = Status.STOPPED;
         }
     }
@@ -132,7 +139,7 @@ public class MusicPlayer implements MyAudioPlayer{
     @Override
     public void pause(){
         if (currentMusic != null && status == Status.PLAYING){
-            time = clip.getMicrosecondPosition();
+            pauseTime = clip.getMicrosecondPosition();
             clip.stop();
             status = Status.PAUSED;
         }
@@ -143,7 +150,7 @@ public class MusicPlayer implements MyAudioPlayer{
      */
     public void resume(){
         if (currentMusic != null && status == Status.PAUSED){
-            clip.setMicrosecondPosition(time);
+            clip.setMicrosecondPosition(pauseTime);
             clip.start();
             status = Status.PLAYING;
         }
@@ -175,7 +182,7 @@ public class MusicPlayer implements MyAudioPlayer{
 
     /**
      * Get the current time
-     * @return (long): current time in milliseconds
+     * @return (double): current time in milliseconds
      */
     public double getTime(){
         return clip.getMicrosecondPosition();
@@ -183,10 +190,15 @@ public class MusicPlayer implements MyAudioPlayer{
 
     /**
      * Get End time
-     * @return (long): end time in milliseconds
+     * @return (double): end time in milliseconds
      */
     public double getDuration() {
         return duration;
+    }
+
+    @Override
+    public List<String> getFormats() {
+        return null;
     }
 
     /**
@@ -213,14 +225,19 @@ public class MusicPlayer implements MyAudioPlayer{
         clip.setMicrosecondPosition((long) time);
     }
 
+    @Override
+    public void setMedia() {
+
+    }
+
     /**
      * Value between 0 and 1
-     * @param v (double): volume between 0 and 1
+     * @param volume (double): volume between 0 and 1
      */
-    public void setVolume(double v){
-        assert (v >= 0 && v <= 1);
-        FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
-        gainControl.setValue((20f *  (float) Math.log10(v)));
+    public void setVolume(double volume){
+        assert (volume >= 0 && volume <= 1);
+        //FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
+        //gainControl.setValue((20f *  (float) Math.log10(volume)));
     }
 
     public double getVolume(){
