@@ -26,10 +26,12 @@ public class UtilsProperties {
             Properties properties = new Properties();
             properties.load(inputStream);
 
-            map.put("masterVolume", properties.getProperty("masterVolume", "100.0"));
-            map.put("audioOutput", properties.getProperty("audioOutput", ""));
-            map.put("pathToMusic", properties.getProperty("pathToMusic", ""));
-            map.put("formats", properties.getProperty("formats", "*.mp3,*.wav"));
+            properties.forEach((key, value) -> map.put(key.toString(), value.toString()));
+
+//            map.put("masterVolume", properties.getProperty("masterVolume", "100.0"));
+//            map.put("audioOutput", properties.getProperty("audioOutput", ""));
+//            map.put("pathToMusic", properties.getProperty("pathToMusic", ""));
+//            map.put("formats", properties.getProperty("formats", "*.mp3,*.wav"));
 
         } catch (IOException ex) {
             ex.printStackTrace();

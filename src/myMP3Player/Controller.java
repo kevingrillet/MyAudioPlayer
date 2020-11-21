@@ -15,16 +15,13 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import myMP3Player.Utils.UtilsDateTime;
-import myMP3Player.Utils.UtilsProperties;
 
 import javax.sound.sampled.*;
 import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 /**
  *  Heart link to MyMP3Player.fxml
@@ -32,9 +29,8 @@ import java.util.Map;
 public class Controller {
     private Duration duration;
     private List<String> listPath;
-    private Map<String,String> mapProperties;
+    private MyProperties myProperties;
     private MediaPlayer mediaPlayer;
-    private Path path;
 
     @FXML // fx:id="comboAudioOutput"
     private ComboBox<String> comboAudioOutput; // Value injected by FXMLLoader
@@ -86,23 +82,23 @@ public class Controller {
                 break;
             case "buttonPlaylistAdd":
                 FileChooser fileChooser = new FileChooser();
-                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Files", Arrays.asList(mapProperties.get("formats").split(","))));
-                if (!path.toString().isEmpty()) {
-                    fileChooser.setInitialDirectory(new File(path.toString()));
+                // TODO 21/11/2020 broken atm...
+//                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Files", myProperties.getFormats()));
+                if (!myProperties.getPathToMusic().toString().isEmpty()) {
+                    fileChooser.setInitialDirectory(new File(myProperties.getPathToMusic().toString()));
                 }
                 List<File> fileList = fileChooser.showOpenMultipleDialog(null);
                 if (fileList != null) {
                     for (File file : fileList) {
                         if (file != null) {
-                            path = Paths.get(file.toURI());
+                            Path path = Paths.get(file.toURI());
                             path = path.getParent();
 
                             listPath.add(file.toString());
                             listViewPlaylist.getItems().add(file.getName());
 //                        setMedia(file);
 
-                            mapProperties.replace("pathToMusic", path.toString());
-                            UtilsProperties.writeProperties(mapProperties);
+                            myProperties.setPathToMusic(path);
                         }
                     }
                     setMedia(new File(listPath.get(0)));
@@ -134,9 +130,9 @@ public class Controller {
         String id = ((Node) event.getSource()).getId();
         if ("comboAudioOutput".equals(id)) {
             // WIP: 20/11/2020 AudioOutput + MediaPlayer
-//            Mixer.Info[] mixerInfo =  AudioSystem.getMixerInfo();
-//            for (Mixer.Info info : mixerInfo) {
-//                if (info.getName().equals(comboAudioOutput.getSelectionModel().getSelectedItem())) {
+            Mixer.Info[] mixerInfo =  AudioSystem.getMixerInfo();
+            for (Mixer.Info info : mixerInfo) {
+                if (info.getName().equals(comboAudioOutput.getSelectionModel().getSelectedItem())) {
 //                    try {
 //                        Clip clip = AudioSystem.getClip(AudioSystem.getMixer(info).getMixerInfo());
 //                        AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File(listViewPlaylist.getItems().get(0)));
@@ -145,11 +141,10 @@ public class Controller {
 //                    } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
 //                        e.printStackTrace();
 //                    }
-//                    break;
-//                }
-//            }
-            mapProperties.replace("audioOutput",comboAudioOutput.getSelectionModel().getSelectedItem());
-            UtilsProperties.writeProperties(mapProperties);
+                    myProperties.setAudioOutput(info);
+                    break;
+                }
+            }
         }
     }
 
@@ -189,22 +184,10 @@ public class Controller {
         /*______ AUDIO OUTPUT ______*/
 
         /*______ LOAD PROPERTIES _____*/
-        mapProperties = UtilsProperties.readProperties();
-
-        sliderMasterVolume.setValue(Double.parseDouble(mapProperties.get("masterVolume")));
-        String mixerName = mapProperties.get("audioOutput");
-        if (mixerName.isEmpty()) {
-            // set default output with getMixer(null)
-            comboAudioOutput.getSelectionModel().select(AudioSystem.getMixer(null).getMixerInfo().getName());
-        }else{
-            for (Mixer.Info info : mixerInfo) {
-                if (info.getName().equals(mixerName)) {
-                    comboAudioOutput.getSelectionModel().select(AudioSystem.getMixer(info).getMixerInfo().getName());
-                    break;
-                }
-            }
-        }
-        path = Paths.get(mapProperties.get("pathToMusic"));
+        myProperties = new MyProperties();
+        sliderMasterVolume.setValue((myProperties.getMasterVolume()));
+        comboAudioOutput.getSelectionModel().select(AudioSystem.getMixer(myProperties.getAudioOutput()).getMixerInfo().getName());
+        myProperties.setAutoSave(true);
         /*______ LOAD PROPERTIES _____*/
     }
 
@@ -261,8 +244,7 @@ public class Controller {
         sliderMasterVolume.valueProperty().addListener(observable -> {
             if (mediaPlayer != null) {
                 mediaPlayer.setVolume(sliderMasterVolume.getValue() / 100.0);
-                mapProperties.replace("masterVolume", String.valueOf(sliderMasterVolume.getValue()));
-                UtilsProperties.writeProperties(mapProperties);
+                myProperties.setMasterVolume(sliderMasterVolume.getValue());
             }
         });
         /*______ MASTER LEVEL ______*/
