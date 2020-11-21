@@ -2,14 +2,12 @@ package myMP3Player;
 
 import javax.sound.sampled.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.Queue;
 
 /**
- * @author David Rochinha (310280)
+ * My Music Player
  */
 public class MusicPlayer {
 
