@@ -49,7 +49,7 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
             });
             return title;
         } else {
-            return null;
+            return "";
         }
     }
 
@@ -139,7 +139,10 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
 
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.currentTimeProperty().addListener(observable -> bean.setTime(getTime()));
-        mediaPlayer.setOnReady(() -> bean.setTime(getTime()));
+        mediaPlayer.setOnReady(() -> {
+            bean.setTime(getTime());
+            bean.setTitle(getMediaName());
+        });
         mediaPlayer.setOnEndOfMedia(() -> {
             mediaPlayer.stop();
             mediaPlayer.seek(new Duration(0));

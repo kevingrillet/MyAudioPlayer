@@ -1,15 +1,14 @@
 package myMusicPlayer;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 
 public class Bean {
     private final ListProperty<String> queue = new SimpleListProperty<>();
 
     private final DoubleProperty time = new SimpleDoubleProperty();
+
+    private final StringProperty title = new SimpleStringProperty();
 
     public ObservableList<String> getQueue() {
         return queue.get();
@@ -33,5 +32,17 @@ public class Bean {
 
     public DoubleProperty timeProperty() {
         return time;
+    }
+
+    public String getTitle() {
+        return title.get();
+    }
+
+    public void setTitle(String title) {
+        this.title.set(title);
+    }
+
+    public StringProperty titleProperty() {
+        return title;
     }
 }

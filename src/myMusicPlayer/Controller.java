@@ -185,6 +185,10 @@ public class Controller {
         bean.timeProperty().addListener(o -> updateTimeValue());
         /*______ TIME SLIDER ______*/
 
+        /*______ TITLE ______*/
+        bean.titleProperty().addListener(observable -> labelPlayerName.setText(bean.getTitle()));
+        /*______ TITLE ______*/
+
         /*______ PLAYLIST ______*/
         bean.queueProperty().addListener((observableValue, strings, t1) -> Objects.requireNonNull(listViewPlaylist).setItems(bean.getQueue()));
         /*______ PLAYLIST ______*/
