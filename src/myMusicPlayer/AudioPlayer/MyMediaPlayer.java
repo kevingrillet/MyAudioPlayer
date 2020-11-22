@@ -28,8 +28,7 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
     public String getMediaName() {
         if (!(mediaPlayer == null)) {
             String title = mediaPlayer.getMedia().getSource();
-            title = title.substring(0, title.length() - ".mp3".length());
-            title = title.substring(title.lastIndexOf("/") + 1).replaceAll("%20", " ");
+            title = title.substring(title.lastIndexOf("/") + 1, title.lastIndexOf(".")).replaceAll("%20", " ");
             // TODO Find how to get title out of the listener.
             mediaPlayer.getMedia().getMetadata().addListener((MapChangeListener.Change<? extends String, ?> c) -> {
                 if (c.wasAdded()) {
