@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 public interface MyAudioPlayerInterface {
+
     /**
      * Add music to the listening queue
      *

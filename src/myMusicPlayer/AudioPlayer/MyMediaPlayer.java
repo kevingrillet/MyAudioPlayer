@@ -134,7 +134,7 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
     @Override
     public void setMedia() {
         if (!(mediaPlayer == null)) mediaPlayer.stop();
-        if (bean.getQueue().size() == 0) return;
+        if (bean.getQueue().isEmpty()) return;
 
         Media media = new Media(new File(bean.getQueue().get(0)).toURI().toString());
 

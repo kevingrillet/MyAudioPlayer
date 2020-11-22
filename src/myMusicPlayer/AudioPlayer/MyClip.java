@@ -16,11 +16,8 @@ import java.util.Queue;
 /**
  * My Music Player
  */
-public class MyClip implements MyAudioPlayerInterface {
+public class MyClip extends MyAudioPlayerAbstract {
 // TODO [implements MyAudioPlayerInterface] -> [extends MyAudioPlayerAbstract]
-// TODO bean.Queue
-    private final static String formats = "*.aif, *.aiff, *.aifc, *.wav, *.WAV";
-    private final Queue<String> musics;
     private ObservableDoubleValue time;
     private Clip clip;
     private File currentMusic;
@@ -34,14 +31,16 @@ public class MyClip implements MyAudioPlayerInterface {
      * @param mixerInfo (Mixer.Info) : Mixer info of the output port wanted
      */
     public MyClip(Mixer.Info mixerInfo, Bean bean) throws LineUnavailableException {
-        musics = new LinkedList<>();
+        super(bean);
         currentMusic = null;
         status = Status.NOTSTART;
         duration = 0l;
         clip = AudioSystem.getClip(mixerInfo);
-        time = new SimpleDoubleProperty((double) clip.getMicrosecondLength()); //TODO
-        time.addListener(t -> bean.setTime(time.get()));
-        bean.timeProperty().addListener(t -> seek(bean.getTime()));
+        clip.addLineListener( e -> bean.setTime(time.get()));
+        bean.timeProperty().addListener(t -> {
+            seek(bean.getTime());
+            System.out.println((long) bean.getTime());
+        });
     }
 
     /**
@@ -67,20 +66,6 @@ public class MyClip implements MyAudioPlayerInterface {
         }
     }
 
-    @Override
-    public void add(String path) {
-        musics.add(path);
-    }
-
-    /**
-     * Add music to the listening queue
-     *
-     * @param paths (Collection<String>) : Collection of paths to the musics
-     */
-    @Override
-    public void addAll(Collection<String> paths) {
-        this.musics.addAll(paths);
-    }
 
     /**
      * Change output mixer
@@ -112,9 +97,9 @@ public class MyClip implements MyAudioPlayerInterface {
      */
     @Override
     public void play() {
-        if (!musics.isEmpty() && currentMusic == null) {
+        if (!bean.getQueue().isEmpty() && currentMusic == null) {
             try {
-                currentMusic = new File(musics.poll());
+                currentMusic = new File(bean.getQueue().get(0));
                 clip.open(AudioSystem.getAudioInputStream(currentMusic));
                 duration = getDurationFile(currentMusic);
             } catch (Exception e) {
@@ -134,13 +119,6 @@ public class MyClip implements MyAudioPlayerInterface {
     @Override
     public void previous() {
         seek(0);
-    }
-
-    @Override
-    public void remove(int index) {
-        if (!musics.isEmpty()) {
-            ((LinkedList) musics).remove(index);
-        }
     }
 
     /**
@@ -183,13 +161,13 @@ public class MyClip implements MyAudioPlayerInterface {
      */
     @Override
     public void next() {
-        if (musics.isEmpty()) {
+        if (bean.getQueue().isEmpty()) {
             stop();
             clip.close();
             currentMusic = null;
         } else {
             try {
-                currentMusic = new File(musics.poll());
+                currentMusic = new File(bean.getQueue().get(0));
                 clip.close();
                 clip.open(AudioSystem.getAudioInputStream(currentMusic));
             } catch (Exception e) {
@@ -220,10 +198,6 @@ public class MyClip implements MyAudioPlayerInterface {
         return duration;
     }
 
-    @Override
-    public List<String> getFormats() {
-        return UtilsProperties.readFormats(formats);
-    }
 
     /**
      * Tells if a music has ended
@@ -264,8 +238,10 @@ public class MyClip implements MyAudioPlayerInterface {
      */
     public void setVolume(double volume) {
         assert (volume >= 0 && volume <= 1);
-        //FloatControl gainControl = (FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN);
-        //gainControl.setValue((20f *  (float) Math.log10(volume)));
+        if (clip.isOpen()) {
+            //FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
+            //gainControl.setValue((float) volume);
+        }
     }
 
     enum Status {
