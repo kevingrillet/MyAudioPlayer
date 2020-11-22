@@ -165,7 +165,7 @@ public class MyClip extends MyAudioPlayerAbstract {
             stop();
             try {
 
-                currentMusic = new File(bean.getQueue().get(0));
+                currentMusic = new File(bean.getQueue().remove(0));
                 clip.close();
                 clip.open(AudioSystem.getAudioInputStream(currentMusic));
             } catch (Exception e) {
@@ -200,7 +200,8 @@ public class MyClip extends MyAudioPlayerAbstract {
      * @param time (long): time in milliseconds
      */
     public void seek(double time) {
-        clip.setMicrosecondPosition((long) time);
+        double t = time/getDuration();
+        clip.setFramePosition((int) (clip.getFrameLength()*t));
     }
 
     @Override
