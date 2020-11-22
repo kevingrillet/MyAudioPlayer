@@ -124,12 +124,17 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
 
     @Override
     public void setMedia() {
-        if (!(mediaPlayer == null)) mediaPlayer.stop();
+        double volume = 100.0;
+        if (!(mediaPlayer == null)) {
+            volume = mediaPlayer.getVolume();
+            mediaPlayer.stop();
+        }
         if (bean.getQueue().isEmpty()) return;
 
         Media media = new Media(new File(bean.getQueue().get(0)).toURI().toString());
 
         mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setVolume(volume);
         mediaPlayer.currentTimeProperty().addListener(observable -> bean.setTime(getTime()));
         mediaPlayer.setOnReady(() -> {
             setDuration(mediaPlayer.getTotalDuration().toMillis());
