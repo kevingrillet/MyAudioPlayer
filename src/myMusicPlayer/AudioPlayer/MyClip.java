@@ -35,6 +35,7 @@ public class MyClip extends MyAudioPlayerAbstract {
         status = Status.NOTSTART;
         clip = AudioSystem.getClip(mixerInfo);
         bean.timeProperty().addListener(t -> {
+            System.out.println(getTime());
             seek(bean.getTime());
         });
     }
@@ -46,21 +47,6 @@ public class MyClip extends MyAudioPlayerAbstract {
         this(AudioSystem.getMixer(null).getMixerInfo(), bean);
     }
 
-    private static long getDurationFile(File file) {
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
-            AudioFormat format = audioInputStream.getFormat();
-            long audioFileLength = file.length();
-            int frameSize = format.getFrameSize();
-            float frameRate = format.getFrameRate();
-            float durationInSeconds = (audioFileLength / (frameSize * frameRate));
-            return (long) durationInSeconds * 1000;
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return 0l;
-        }
-    }
 
 
     /**
@@ -181,7 +167,7 @@ public class MyClip extends MyAudioPlayerAbstract {
      * @return (double): current time in milliseconds
      */
     public double getTime() {
-        return clip.getMicrosecondPosition();
+        return clip.getMicrosecondPosition()/1000;
     }
 
     /**
@@ -200,8 +186,7 @@ public class MyClip extends MyAudioPlayerAbstract {
      * @param time (long): time in milliseconds
      */
     public void seek(double time) {
-        double t = time/getDuration();
-        clip.setFramePosition((int) (clip.getFrameLength()*t));
+        clip.setMicrosecondPosition((long) (time*1000));
     }
 
     @Override
@@ -228,6 +213,22 @@ public class MyClip extends MyAudioPlayerAbstract {
         if (clip.isOpen()) {
             //FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
             //gainControl.setValue((float) volume);
+        }
+    }
+
+    private static long getDurationFile(File file) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+            AudioFormat format = audioInputStream.getFormat();
+            long audioFileLength = file.length();
+            int frameSize = format.getFrameSize();
+            float frameRate = format.getFrameRate();
+            float durationInSeconds = (audioFileLength / (frameSize * frameRate));
+            return (long) durationInSeconds * 1000;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return 0l;
         }
     }
 
