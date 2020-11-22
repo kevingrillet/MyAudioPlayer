@@ -17,14 +17,12 @@ import java.util.Queue;
  * My Music Player
  */
 public class MyClip extends MyAudioPlayerAbstract {
-// TODO [implements MyAudioPlayerInterface] -> [extends MyAudioPlayerAbstract]
 
     private ObservableDoubleValue time;
     private Clip clip;
     private File currentMusic;
     private long pauseTime;
     private MyClip.Status status;
-    private long duration;
 
     /**
      * Default constructor
@@ -35,12 +33,9 @@ public class MyClip extends MyAudioPlayerAbstract {
         super(bean);
         currentMusic = null;
         status = Status.NOTSTART;
-        duration = 0l;
         clip = AudioSystem.getClip(mixerInfo);
-        clip.addLineListener( e -> bean.setTime(time.get()));
         bean.timeProperty().addListener(t -> {
             seek(bean.getTime());
-            System.out.println((long) bean.getTime());
         });
     }
 
@@ -102,7 +97,6 @@ public class MyClip extends MyAudioPlayerAbstract {
             try {
                 currentMusic = new File(bean.getQueue().get(0));
                 clip.open(AudioSystem.getAudioInputStream(currentMusic));
-                duration = getDurationFile(currentMusic);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -130,6 +124,7 @@ public class MyClip extends MyAudioPlayerAbstract {
         if (currentMusic != null) {
             clip.stop();
             pauseTime = 0l;
+            seek(0);
             status = Status.STOPPED;
         }
     }
@@ -167,16 +162,15 @@ public class MyClip extends MyAudioPlayerAbstract {
             clip.close();
             currentMusic = null;
         } else {
+            stop();
             try {
+
                 currentMusic = new File(bean.getQueue().get(0));
                 clip.close();
                 clip.open(AudioSystem.getAudioInputStream(currentMusic));
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-                clip.stop();
             }
-            duration = getDurationFile(currentMusic);
-            stop();
             play();
         }
     }
@@ -196,18 +190,9 @@ public class MyClip extends MyAudioPlayerAbstract {
      * @return (double): end time in milliseconds
      */
     public double getDuration() {
-        return duration;
+        return getDurationFile(currentMusic);
     }
 
-
-    /**
-     * Tells if a music has ended
-     *
-     * @return (if the current music has ended)
-     */
-    public boolean hasEnded() {
-        return clip.getMicrosecondPosition() >= duration;
-    }
 
     /**
      * Go to time position
