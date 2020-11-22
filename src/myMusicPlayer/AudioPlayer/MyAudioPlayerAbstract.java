@@ -10,6 +10,7 @@ import java.util.List;
 public abstract class MyAudioPlayerAbstract implements MyAudioPlayerInterface {
     private final static String formats = "*.mp3, *.wav, *.WAV";
     protected final Bean bean;
+    private double duration;
 
     public MyAudioPlayerAbstract(Bean bean) {
         this.bean = bean;
@@ -24,6 +25,16 @@ public abstract class MyAudioPlayerAbstract implements MyAudioPlayerInterface {
     @Override
     public void addAll(Collection<String> paths) {
         bean.getQueue().addAll(paths);
+    }
+
+    @Override
+    public double getDuration() {
+        return duration;
+    }
+
+    @Override
+    public void setDuration(double duration) {
+        this.duration = duration;
     }
 
     @Override

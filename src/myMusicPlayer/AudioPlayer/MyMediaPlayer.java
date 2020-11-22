@@ -20,15 +20,6 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
     }
 
     @Override
-    public double getDuration() {
-        if (!(mediaPlayer == null)) {
-            return mediaPlayer.getTotalDuration().toMillis();
-        } else {
-            return -1;
-        }
-    }
-
-    @Override
     public List<String> getFormats() {
         return UtilsProperties.readFormats(formats);
     }
@@ -141,6 +132,7 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.currentTimeProperty().addListener(observable -> bean.setTime(getTime()));
         mediaPlayer.setOnReady(() -> {
+            setDuration(mediaPlayer.getTotalDuration().toMillis());
             bean.setTime(getTime());
             bean.setTitle(getMediaName());
         });
@@ -152,7 +144,9 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
                 setMedia();
                 mediaPlayer.play();
             } else {
+                setDuration(0);
                 bean.setTitle("");
+                bean.setTime(0);
             }
         });
     }
