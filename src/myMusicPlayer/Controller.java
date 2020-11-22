@@ -22,6 +22,7 @@ import javax.sound.sampled.SourceDataLine;
 import java.io.File;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Heart link to MyMusicPlayer.fxml
@@ -146,7 +147,6 @@ public class Controller {
         assert comboAudioOutput != null : "fx:id=\"comboAudioOutput\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
         assert labelPlayerName != null : "fx:id=\"labelPlayerName\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
         assert labelPlayerTime != null : "fx:id=\"labelPlayerTime\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
-        assert listViewPlaylist != null : "fx:id=\"listViewPlaylist\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
         assert sliderMasterVolume != null : "fx:id=\"sliderMasterVolume\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
         assert sliderPlayerTime != null : "fx:id=\"sliderPlayerTime\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
 
@@ -186,7 +186,7 @@ public class Controller {
         /*______ TIME SLIDER ______*/
 
         /*______ PLAYLIST ______*/
-        bean.queueProperty().addListener(observable -> listViewPlaylist.setItems((ObservableList<String>) bean.getQueue()));
+        bean.queueProperty().addListener((observableValue, strings, t1) -> Objects.requireNonNull(listViewPlaylist).setItems(bean.getQueue()));
         /*______ PLAYLIST ______*/
 
         /*______ LOAD PROPERTIES _____*/

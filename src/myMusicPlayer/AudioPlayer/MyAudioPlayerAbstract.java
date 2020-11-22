@@ -1,5 +1,6 @@
 package myMusicPlayer.AudioPlayer;
 
+import javafx.collections.FXCollections;
 import myMusicPlayer.Bean;
 import myMusicPlayer.Utils.UtilsProperties;
 
@@ -12,6 +13,7 @@ public abstract class MyAudioPlayerAbstract implements MyAudioPlayerInterface {
 
     public MyAudioPlayerAbstract(Bean bean) {
         this.bean = bean;
+        this.bean.setQueue(FXCollections.<String>observableArrayList());
     }
 
     @Override
