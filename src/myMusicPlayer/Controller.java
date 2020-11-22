@@ -66,6 +66,7 @@ public class Controller {
                 myAudioPlayer.pause();
                 break;
             case "buttonPlayerPlay":
+                myAudioPlayer.setVolume(sliderMasterVolume.getValue() / 100.0);
                 myAudioPlayer.play();
                 break;
             case "buttonPlayerNext":
