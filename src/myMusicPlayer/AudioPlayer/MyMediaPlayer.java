@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.List;
 
 public class MyMediaPlayer extends MyAudioPlayerAbstract {
+    // TODO Fix time for slider
     private final static String formats = "*.aif, *.aiff, *.aifc, *.m4a, *.mp3, *.wav, *.WAV";
     private MediaPlayer mediaPlayer;
 
@@ -150,6 +151,8 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
             if (bean.getQueue().size() > 0) {
                 setMedia();
                 mediaPlayer.play();
+            } else {
+                bean.setTitle("");
             }
         });
     }

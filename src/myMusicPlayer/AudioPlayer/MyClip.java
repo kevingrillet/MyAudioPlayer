@@ -17,7 +17,8 @@ import java.util.Queue;
  * My Music Player
  */
 public class MyClip implements MyAudioPlayerInterface {
-
+// TODO [implements MyAudioPlayerInterface] -> [extends MyAudioPlayerAbstract]
+// TODO bean.Queue
     private final static String formats = "*.aif, *.aiff, *.aifc, *.wav, *.WAV";
     private final Queue<String> musics;
     private ObservableDoubleValue time;
