@@ -30,11 +30,11 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
         if (!(mediaPlayer == null)) {
             String title = mediaPlayer.getMedia().getSource();
             title = title.substring(title.lastIndexOf("/") + 1, title.lastIndexOf(".")).replaceAll("%20", " ");
-            // TODO Find how to get title out of the listener.
             mediaPlayer.getMedia().getMetadata().addListener((MapChangeListener.Change<? extends String, ?> c) -> {
                 if (c.wasAdded()) {
                     if ("title".equals(c.getKey())) {
                         System.out.println(c.getValueAdded().toString());
+                        // TODO Find how to get title out of the listener.
 //                        title = c.getValueAdded().toString();
                     }
                 }

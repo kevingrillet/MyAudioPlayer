@@ -86,9 +86,7 @@ public class Controller {
                 if (fileList != null) {
                     for (File file : fileList) {
                         if (file != null) {
-//                            bean.getQueue().add(file.toString());
                             myAudioPlayer.add(file.toString());
-//                            listViewPlaylist.getItems().add(file.getName());
                             myProperties.setPathToMusic(Paths.get(file.toURI()).getParent());
                         }
                     }
@@ -98,7 +96,6 @@ public class Controller {
             case "buttonPlaylistRemove":
                 if (listViewPlaylist.getSelectionModel().getSelectedIndex() >= 0) {
                     myAudioPlayer.remove(listViewPlaylist.getSelectionModel().getSelectedIndex());
-//                    listViewPlaylist.getItems().remove(listViewPlaylist.getSelectionModel().getSelectedIndex());
                     if (listViewPlaylist.getSelectionModel().getSelectedIndex() == 0) {
                         myAudioPlayer.stop();
                         if (listViewPlaylist.getItems().size() > 1) {
