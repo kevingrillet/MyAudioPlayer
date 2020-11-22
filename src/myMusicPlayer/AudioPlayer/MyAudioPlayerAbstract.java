@@ -6,7 +6,7 @@ import myMusicPlayer.Utils.UtilsProperties;
 import java.util.Collection;
 import java.util.List;
 
-public abstract  class MyAudioPlayerAbstract implements MyAudioPlayerInterface{
+public abstract class MyAudioPlayerAbstract implements MyAudioPlayerInterface {
     private final static String formats = "*.mp3, *.wav, *.WAV";
     protected final Bean bean;
 

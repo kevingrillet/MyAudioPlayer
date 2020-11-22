@@ -49,7 +49,6 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
         }
     }
 
-
     @Override
     public double getTime() {
         return mediaPlayer.getCurrentTime().toMillis();
