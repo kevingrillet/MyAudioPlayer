@@ -1,4 +1,4 @@
-package myMP3Player.Utils;
+package myMusicPlayer.Utils;
 
 import java.io.*;
 import java.nio.file.Files;

@@ -1,6 +1,6 @@
-package myMP3Player;
+package myMusicPlayer;
 
-import myMP3Player.Utils.UtilsProperties;
+import myMusicPlayer.Utils.UtilsProperties;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Mixer;
@@ -19,7 +19,7 @@ public class MyProperties {
     public final static String PATH_TO_MUSIC = "pathToMusic";
 
     private final static String configFile = "config.properties";
-    private final static String pathToConfig = "src/myMP3Player/Resources";
+    private final static String pathToConfig = "src/myMusicPlayer/Resources";
 
     private final static String defaultAudioOutput = "";
     private final static String defaultFormats = "*.mp3, *.wav";

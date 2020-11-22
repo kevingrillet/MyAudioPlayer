@@ -1,9 +1,9 @@
-package myMP3Player;
+package myMusicPlayer.AudioPlayer;
 
 import java.util.Collection;
 import java.util.List;
 
-public interface MyAudioPlayer {
+public interface MyAudioPlayerInterface {
     /**
      * Add music to the listening queue
      *

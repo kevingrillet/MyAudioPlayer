@@ -1,35 +1,21 @@
-package myMP3Player;
+package myMusicPlayer.AudioPlayer;
 
 import javafx.collections.MapChangeListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
-import myMP3Player.Utils.UtilsProperties;
+import myMusicPlayer.Bean;
+import myMusicPlayer.Utils.UtilsProperties;
 
 import java.io.File;
-import java.util.Collection;
-import java.util.LinkedList;
 import java.util.List;
 
-public class MyMediaPlayer implements MyAudioPlayer {
+public class MyMediaPlayer extends MyAudioPlayerAbstract {
     private final static String formats = "*.aif, *.aiff, *.aifc, *.m4a, *.mp3, *.wav, *.WAV";
-    private final Bean bean;
-    private final List<String> queue;
     private MediaPlayer mediaPlayer;
 
     public MyMediaPlayer(Bean bean) {
-        queue = new LinkedList<>();
-        this.bean = bean;
-    }
-
-    @Override
-    public void add(String path) {
-        queue.add(path);
-    }
-
-    @Override
-    public void addAll(Collection<String> paths) {
-        queue.addAll(paths);
+        super(bean);
     }
 
     @Override
@@ -131,11 +117,6 @@ public class MyMediaPlayer implements MyAudioPlayer {
     }
 
     @Override
-    public void remove(int index) {
-        queue.remove(index);
-    }
-
-    @Override
     public void seek(double time) {
         if (!(mediaPlayer == null)) {
             mediaPlayer.seek(new Duration(time));
@@ -144,7 +125,10 @@ public class MyMediaPlayer implements MyAudioPlayer {
 
     @Override
     public void setMedia() {
-        Media media = new Media(new File(queue.get(0)).toURI().toString());
+        if (!(mediaPlayer == null)) mediaPlayer.stop();
+        if (bean.getQueue().size() == 0) return;
+
+        Media media = new Media(new File(bean.getQueue().get(0)).toURI().toString());
 
         mediaPlayer = new MediaPlayer(media);
         mediaPlayer.currentTimeProperty().addListener(observable -> bean.setTime(getTime()));
@@ -152,10 +136,8 @@ public class MyMediaPlayer implements MyAudioPlayer {
         mediaPlayer.setOnEndOfMedia(() -> {
             mediaPlayer.stop();
             mediaPlayer.seek(new Duration(0));
-            queue.remove(0);
-            // TODO refresh interface
             bean.getQueue().remove(0);
-            if (queue.size() > 0) {
+            if (bean.getQueue().size() > 0) {
                 setMedia();
                 mediaPlayer.play();
             }

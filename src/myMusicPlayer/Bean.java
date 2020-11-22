@@ -1,4 +1,4 @@
-package myMP3Player;
+package myMusicPlayer;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;

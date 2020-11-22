@@ -1,4 +1,4 @@
-package myMP3Player.Utils;
+package myMusicPlayer.Utils;
 
 import javafx.util.Duration;
 

@@ -1,9 +1,10 @@
-package myMP3Player;
+package myMusicPlayer.AudioPlayer;
 
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ObservableDoubleValue;
 import javafx.scene.media.Media;
-import myMP3Player.Utils.UtilsProperties;
+import myMusicPlayer.Bean;
+import myMusicPlayer.Utils.UtilsProperties;
 
 import javax.sound.sampled.*;
 import java.io.File;
@@ -15,7 +16,7 @@ import java.util.Queue;
 /**
  * My Music Player
  */
-public class MusicPlayer implements MyAudioPlayer {
+public class MyClip implements MyAudioPlayerInterface {
 
     private final static String formats = "*.aif, *.aiff, *.aifc, *.wav, *.WAV";
     private final Queue<String> musics;
@@ -23,7 +24,7 @@ public class MusicPlayer implements MyAudioPlayer {
     private Clip clip;
     private File currentMusic;
     private long pauseTime;
-    private MusicPlayer.Status status;
+    private MyClip.Status status;
     private long duration;
 
     /**
@@ -31,7 +32,7 @@ public class MusicPlayer implements MyAudioPlayer {
      *
      * @param mixerInfo (Mixer.Info) : Mixer info of the output port wanted
      */
-    public MusicPlayer(Mixer.Info mixerInfo, Bean bean) throws LineUnavailableException {
+    public MyClip(Mixer.Info mixerInfo, Bean bean) throws LineUnavailableException {
         musics = new LinkedList<>();
         currentMusic = null;
         status = Status.NOTSTART;
@@ -45,7 +46,7 @@ public class MusicPlayer implements MyAudioPlayer {
     /**
      * Constructor with default mixer
      */
-    public MusicPlayer(Bean bean) throws LineUnavailableException {
+    public MyClip(Bean bean) throws LineUnavailableException {
         this(AudioSystem.getMixer(null).getMixerInfo(), bean);
     }
 

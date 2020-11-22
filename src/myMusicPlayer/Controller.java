@@ -1,4 +1,4 @@
-package myMP3Player;
+package myMusicPlayer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,7 +11,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
-import myMP3Player.Utils.UtilsDateTime;
+import myMusicPlayer.AudioPlayer.MyAudioPlayerInterface;
+import myMusicPlayer.AudioPlayer.MyMediaPlayer;
+import myMusicPlayer.Utils.UtilsDateTime;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Line;
@@ -22,12 +24,13 @@ import java.nio.file.Paths;
 import java.util.List;
 
 /**
- * Heart link to MyMP3Player.fxml
+ * Heart link to MyMusicPlayer.fxml
  */
 public class Controller {
     private final Bean bean = new Bean();
     private MyProperties myProperties;
-    private MyAudioPlayer myAudioPlayer;
+    private MyAudioPlayerInterface myAudioPlayer;
+
     @FXML // fx:id="comboAudioOutput"
     private ComboBox<String> comboAudioOutput; // Value injected by FXMLLoader
 
@@ -81,9 +84,9 @@ public class Controller {
                 if (fileList != null) {
                     for (File file : fileList) {
                         if (file != null) {
-                            bean.getQueue().add(file.toString());
+//                            bean.getQueue().add(file.toString());
                             myAudioPlayer.add(file.toString());
-                            listViewPlaylist.getItems().add(file.getName());
+//                            listViewPlaylist.getItems().add(file.getName());
                             myProperties.setPathToMusic(Paths.get(file.toURI()).getParent());
                         }
                     }
@@ -93,7 +96,7 @@ public class Controller {
             case "buttonPlaylistRemove":
                 if (listViewPlaylist.getSelectionModel().getSelectedIndex() >= 0) {
                     myAudioPlayer.remove(listViewPlaylist.getSelectionModel().getSelectedIndex());
-                    listViewPlaylist.getItems().remove(listViewPlaylist.getSelectionModel().getSelectedIndex());
+//                    listViewPlaylist.getItems().remove(listViewPlaylist.getSelectionModel().getSelectedIndex());
                     if (listViewPlaylist.getSelectionModel().getSelectedIndex() == 0) {
                         myAudioPlayer.stop();
                         if (listViewPlaylist.getItems().size() > 1) {
@@ -140,12 +143,12 @@ public class Controller {
      */
     @FXML
     void initialize() {
-        assert comboAudioOutput != null : "fx:id=\"comboAudioOutput\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
-        assert labelPlayerName != null : "fx:id=\"labelPlayerName\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
-        assert labelPlayerTime != null : "fx:id=\"labelPlayerTime\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
-        assert listViewPlaylist != null : "fx:id=\"listViewPlaylist\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
-        assert sliderMasterVolume != null : "fx:id=\"sliderMasterVolume\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
-        assert sliderPlayerTime != null : "fx:id=\"sliderPlayerTime\" was not injected: check your FXML file 'MyMP3Player.fxml'.";
+        assert comboAudioOutput != null : "fx:id=\"comboAudioOutput\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
+        assert labelPlayerName != null : "fx:id=\"labelPlayerName\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
+        assert labelPlayerTime != null : "fx:id=\"labelPlayerTime\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
+        assert listViewPlaylist != null : "fx:id=\"listViewPlaylist\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
+        assert sliderMasterVolume != null : "fx:id=\"sliderMasterVolume\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
+        assert sliderPlayerTime != null : "fx:id=\"sliderPlayerTime\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
 
         myAudioPlayer = new MyMediaPlayer(bean);
 
@@ -166,8 +169,6 @@ public class Controller {
             }
         }
         comboAudioOutput.setItems(listAudioOutput);
-
-        // Play: https://stackoverflow.com/questions/37609430/play-sound-on-specific-sound-device-java
         /*______ AUDIO OUTPUT ______*/
 
         /*______ MASTER LEVEL ______*/
@@ -180,11 +181,13 @@ public class Controller {
         /*______ MASTER LEVEL ______*/
 
         /*______ TIME SLIDER ______*/
-        sliderPlayerTime.valueProperty().addListener(observable -> {
-            bean.setTime(myAudioPlayer.getDuration() * sliderPlayerTime.getValue() / 100.0);
-        });
+        sliderPlayerTime.valueProperty().addListener(observable -> bean.setTime(myAudioPlayer.getDuration() * sliderPlayerTime.getValue() / 100.0));
         bean.timeProperty().addListener(o -> updateTimeValue());
         /*______ TIME SLIDER ______*/
+
+        /*______ PLAYLIST ______*/
+        bean.queueProperty().addListener(observable -> listViewPlaylist.setItems((ObservableList<String>) bean.getQueue()));
+        /*______ PLAYLIST ______*/
 
         /*______ LOAD PROPERTIES _____*/
         myProperties = new MyProperties();
