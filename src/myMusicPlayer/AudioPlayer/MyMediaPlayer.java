@@ -17,6 +17,7 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
 
     public MyMediaPlayer(Bean bean) {
         super(bean);
+        bean.timeProperty().addListener(e -> seek(bean.getTime()));
     }
 
     @Override
@@ -118,7 +119,7 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
     @Override
     public void seek(double time) {
         if (!(mediaPlayer == null)) {
-            mediaPlayer.seek(new Duration(time));
+            mediaPlayer.seek(Duration.millis(time));
         }
     }
 
