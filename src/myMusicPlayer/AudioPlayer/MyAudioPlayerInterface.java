@@ -26,6 +26,13 @@ public interface MyAudioPlayerInterface {
     double getDuration();
 
     /**
+     * Set duration of the current media
+     *
+     * @param duration total duration
+     */
+    void setDuration(double duration);
+
+    /**
      * Get list of compatible formats
      *
      * @return List<String>: List of formats for FileChooser.ExtensionFilter
