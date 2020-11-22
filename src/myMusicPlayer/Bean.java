@@ -8,7 +8,7 @@ import javafx.collections.ObservableList;
 
 public class Bean {
     private final ListProperty<String> queue = new SimpleListProperty<>();
-    ;
+
     private final DoubleProperty time = new SimpleDoubleProperty();
 
     public ObservableList<String> getQueue() {

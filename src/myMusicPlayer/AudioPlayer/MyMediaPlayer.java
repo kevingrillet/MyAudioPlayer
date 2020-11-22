@@ -20,7 +20,11 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
 
     @Override
     public double getDuration() {
-        return mediaPlayer.getTotalDuration().toMillis();
+        if (!(mediaPlayer == null)) {
+            return mediaPlayer.getTotalDuration().toMillis();
+        } else {
+            return -1;
+        }
     }
 
     @Override
@@ -51,7 +55,11 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
 
     @Override
     public double getTime() {
-        return mediaPlayer.getCurrentTime().toMillis();
+        if (!(mediaPlayer == null)) {
+            return mediaPlayer.getCurrentTime().toMillis();
+        } else {
+            return -1;
+        }
     }
 
     @Override
