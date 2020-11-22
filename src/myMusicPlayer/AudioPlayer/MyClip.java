@@ -18,6 +18,7 @@ import java.util.Queue;
  */
 public class MyClip extends MyAudioPlayerAbstract {
 // TODO [implements MyAudioPlayerInterface] -> [extends MyAudioPlayerAbstract]
+
     private ObservableDoubleValue time;
     private Clip clip;
     private File currentMusic;
