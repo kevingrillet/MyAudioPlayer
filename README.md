@@ -19,6 +19,11 @@ To use this audio player, set `myAudioPlayer = new MyMediaPlayer(bean)` in `Cont
 ### javax.sound.sampled.Clip
 To use this audio player, set `myAudioPlayer = new MyClip(bean)` in `Controller.initialize()`.
 
+## IntelliJ IDEA
+Follow the JavaFX help: <https://www.jetbrains.com/help/idea/javafx.html>
+
+Set VM options : `--module-path %PATH_TO_FX% --add-modules javafx.controls,javafx.media,javafx.fxml`
+
 ## ToDo
 - [ ] Volume in `AudioPLayer/MyCLip`
 - [ ] Fix the lag machine in `AudioPlayer/MyMediaPlayer`
