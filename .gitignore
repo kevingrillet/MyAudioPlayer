@@ -22,7 +22,13 @@
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
-#IntelliJ IDEA
-/out/
-/src/myMusicPlayer/Resources/config.properties
+# IntelliJ IDEA
+out/
+.idea/
+.idea_modules/
+*.iml
+*.ipr
+*.iws
+
+# Project
 /src/myMusicPlayer/Resources/config.properties
