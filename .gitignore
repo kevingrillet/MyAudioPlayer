@@ -24,11 +24,6 @@ hs_err_pid*
 
 # IntelliJ IDEA
 out/
-.idea/
-.idea_modules/
-*.iml
-*.ipr
-*.iws
 
 # Project
 /src/myMusicPlayer/Resources/config.properties
