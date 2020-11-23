@@ -11,12 +11,12 @@ import java.io.File;
 import java.util.List;
 
 public class MyMediaPlayer extends MyAudioPlayerAbstract {
-    // TODO Fix time for slider
     private final static String formats = "*.aif, *.aiff, *.aifc, *.m4a, *.mp3, *.wav, *.WAV";
     private MediaPlayer mediaPlayer;
 
     public MyMediaPlayer(Bean bean) {
         super(bean);
+        // WIP: LAG MACHINE
         bean.timeProperty().addListener(e -> seek(bean.getTime()));
     }
 
@@ -33,9 +33,7 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
             mediaPlayer.getMedia().getMetadata().addListener((MapChangeListener.Change<? extends String, ?> c) -> {
                 if (c.wasAdded()) {
                     if ("title".equals(c.getKey())) {
-                        System.out.println(c.getValueAdded().toString());
-                        // TODO Find how to get title out of the listener.
-//                        title = c.getValueAdded().toString();
+                        bean.setTitle(c.getValueAdded().toString());
                     }
                 }
             });
@@ -127,7 +125,7 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
         double volume = 100.0;
         if (!(mediaPlayer == null)) {
             volume = mediaPlayer.getVolume();
-            mediaPlayer.stop();
+            mediaPlayer.dispose();
         }
         if (bean.getQueue().isEmpty()) return;
 
