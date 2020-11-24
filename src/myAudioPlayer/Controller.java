@@ -9,6 +9,8 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import myAudioPlayer.AudioPlayer.MyAudioPlayerInterface;
@@ -129,6 +131,13 @@ public class Controller {
         }
     }
 
+    @FXML
+    void handleOnKeyPressed(KeyEvent event) {
+        if (event.getCode() == KeyCode.P && event.isControlDown()) {
+            myAudioPlayer.play();
+        }
+    }
+
     /**
      * This method is called by the FXMLLoader when initialization is complete
      */
@@ -212,4 +221,6 @@ public class Controller {
             sliderPlayerTime.setValue(currentTime.divide(duration.toMillis()).toMillis() * 100.0);
         }
     }
+
+
 }

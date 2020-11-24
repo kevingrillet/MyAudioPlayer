@@ -4,7 +4,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/11.0.1"
-            fx:controller="myAudioPlayer.Controller">
+            fx:controller="myAudioPlayer.Controller" onKeyPressed="#handleOnKeyPressed">
     <top>
         <VBox BorderPane.alignment="CENTER">
             <TitledPane animated="false" collapsible="false" prefHeight="60.0" prefWidth="600.0" text="Audio Settings">
@@ -43,7 +43,7 @@
                                 <Label fx:id="labelPlayerTime" text="0:00/0:00" BorderPane.alignment="CENTER"/>
                             </right>
                             <center>
-                                <Slider id="sliderPlayerTime" fx:id="sliderPlayerTime" disable="true" prefHeight="14.0"
+                                <Slider id="sliderPlayerTime" fx:id="sliderPlayerTime" prefHeight="14.0"
                                         prefWidth="495.0" BorderPane.alignment="CENTER"/>
                             </center>
                         </BorderPane>
