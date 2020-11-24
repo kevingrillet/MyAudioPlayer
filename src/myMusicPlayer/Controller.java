@@ -78,7 +78,7 @@ public class Controller {
             case "buttonPlaylistAdd":
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Audio Files", myProperties.getFormats()));
-                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("AudioPlayer", myAudioPlayer.getFormats()));
+                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Audio Player", myAudioPlayer.getFormats()));
                 if (!myProperties.getPathToMusic().toString().isEmpty()) {
                     fileChooser.setInitialDirectory(new File(myProperties.getPathToMusic().toString()));
                 }
@@ -118,18 +118,9 @@ public class Controller {
     void handleComboAction(ActionEvent event) {
         String id = ((Node) event.getSource()).getId();
         if ("comboAudioOutput".equals(id)) {
-            // WIP: 20/11/2020 AudioOutput + MediaPlayer
             Mixer.Info[] mixerInfo = AudioSystem.getMixerInfo();
             for (Mixer.Info info : mixerInfo) {
                 if (info.getName().equals(comboAudioOutput.getSelectionModel().getSelectedItem())) {
-//                    try {
-//                        Clip clip = AudioSystem.getClip(AudioSystem.getMixer(info).getMixerInfo());
-//                        AudioInputStream inputStream = AudioSystem.getAudioInputStream(new File(listViewPlaylist.getItems().get(0)));
-//                        clip.open(inputStream);
-//                        clip.start();
-//                    } catch (LineUnavailableException | UnsupportedAudioFileException | IOException e) {
-//                        e.printStackTrace();
-//                    }
                     myProperties.setAudioOutput(info);
                     break;
                 }
@@ -149,6 +140,7 @@ public class Controller {
         assert sliderPlayerTime != null : "fx:id=\"sliderPlayerTime\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
 
         myAudioPlayer = new MyMediaPlayer(bean);
+//        myAudioPlayer = new MyClip(bean);
 
         /*______ AUDIO OUTPUT ______*/
         // How to get list of AudioOutput.

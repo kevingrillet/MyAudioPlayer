@@ -1,5 +1,6 @@
 package myMusicPlayer.AudioPlayer;
 
+import javax.sound.sampled.Mixer;
 import java.util.Collection;
 import java.util.List;
 
@@ -67,6 +68,13 @@ public interface MyAudioPlayerInterface {
      * @param volume (double): volume between 0 and 1
      */
     void setVolume(double volume);
+
+    /**
+     * Define the new Audio output
+     *
+     * @param audioOutput (Mixer.Info)
+     */
+    void setAudioOutput(Mixer.Info audioOutput);
 
     /**
      * Play the next music

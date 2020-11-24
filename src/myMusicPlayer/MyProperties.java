@@ -13,10 +13,10 @@ import java.util.Map;
  * Properties of myMP3Player
  */
 public class MyProperties {
-    public final static String AUDIO_OUTPUT = "audioOutput";
-    public final static String FORMATS = "formats";
-    public final static String MASTER_VOLUME = "masterVolume";
-    public final static String PATH_TO_MUSIC = "pathToMusic";
+    private final static String AUDIO_OUTPUT = "audioOutput";
+    private final static String FORMATS = "formats";
+    private final static String MASTER_VOLUME = "masterVolume";
+    private final static String PATH_TO_MUSIC = "pathToMusic";
 
     private final static String configFile = "config.properties";
     private final static String pathToConfig = "src/myMusicPlayer/Resources";

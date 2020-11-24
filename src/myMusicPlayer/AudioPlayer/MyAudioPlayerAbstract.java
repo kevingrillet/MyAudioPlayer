@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.List;
 
 public abstract class MyAudioPlayerAbstract implements MyAudioPlayerInterface {
-    private final static String formats = "*.mp3, *.wav, *.WAV";
+    private final static String formats = "*.aif, *.aiff, *.aifc, *.m4a, *.wav, *.WAV";
     protected final Bean bean;
     private double duration;
 

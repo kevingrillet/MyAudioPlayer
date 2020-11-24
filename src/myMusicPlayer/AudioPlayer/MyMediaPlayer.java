@@ -7,11 +7,12 @@ import javafx.util.Duration;
 import myMusicPlayer.Bean;
 import myMusicPlayer.Utils.UtilsProperties;
 
+import javax.sound.sampled.Mixer;
 import java.io.File;
 import java.util.List;
 
 public class MyMediaPlayer extends MyAudioPlayerAbstract {
-    private final static String formats = "*.aif, *.aiff, *.aifc, *.m4a, *.mp3, *.wav, *.WAV";
+    private final static String formats = "*.aif, *.aiff, *.aifc, *.m4a, *.wav, *.WAV";
     private MediaPlayer mediaPlayer;
 
     public MyMediaPlayer(Bean bean) {
@@ -67,6 +68,11 @@ public class MyMediaPlayer extends MyAudioPlayerAbstract {
         if (!(mediaPlayer == null)) {
             mediaPlayer.setVolume(volume);
         }
+    }
+
+    @Override
+    public void setAudioOutput(Mixer.Info audioOutput) {
+        // TODO can't?
     }
 
     @Override
