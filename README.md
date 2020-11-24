@@ -1,6 +1,6 @@
 # MyAudioPlayer
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Java SE Development Kit 11 Downloads](https://img.shields.io/badge/java-v11-red?logo=java)](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
+[![Java SE Development Kit 15 Downloads](https://img.shields.io/badge/java-v15-red?logo=java)](https://www.oracle.com/java/technologies/javase-jdk15-downloads.html)
 [![JavaFX](https://img.shields.io/badge/javafx-v1-red0)](https://gluonhq.com/products/javafx/)
 
 
