@@ -170,9 +170,9 @@ public class MyClip extends MyAudioPlayerAbstract {
 
     @Override
     public double getVolume() {
-        if (clip != null) {
+        if (clip != null && clip.isControlSupported(FloatControl.Type.MASTER_GAIN)) {
             FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
-            return gainControl.getValue();
+            return Math.pow(gainControl.getValue()/20, 10)/2;
         } else {
             return -1f;
         }
