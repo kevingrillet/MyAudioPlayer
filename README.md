@@ -1,7 +1,7 @@
 # MyAudioPlayer
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
-[![Java SE Development Kit 15 Downloads](https://img.shields.io/badge/java-v15-red?logo=java)](https://www.oracle.com/java/technologies/javase-jdk15-downloads.html)
-[![JavaFX](https://img.shields.io/badge/javafx-v1-red0)](https://gluonhq.com/products/javafx/)
+[![Java Development Kit, version 15](https://img.shields.io/badge/Java-JDK15.0.1-red?logo=java)](https://jdk.java.net/15/)
+[![JavaFX](https://img.shields.io/badge/JavaFX-15-red)](https://gluonhq.com/products/javafx/)
 
 
  Test implementation of two java audio players.
