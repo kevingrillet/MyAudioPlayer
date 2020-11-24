@@ -1,4 +1,4 @@
-package myMusicPlayer;
+package myAudioPlayer;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -11,9 +11,9 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.Slider;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
-import myMusicPlayer.AudioPlayer.MyAudioPlayerInterface;
-import myMusicPlayer.AudioPlayer.MyMediaPlayer;
-import myMusicPlayer.Utils.UtilsDateTime;
+import myAudioPlayer.AudioPlayer.MyAudioPlayerInterface;
+import myAudioPlayer.AudioPlayer.MyMediaPlayer;
+import myAudioPlayer.Utils.UtilsDateTime;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Line;
@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Heart link to MyMusicPlayer.fxml
+ * Heart link to MyAudioPlayer.fxml
  */
 public class Controller {
     private final Bean bean = new Bean();
@@ -133,11 +133,11 @@ public class Controller {
      */
     @FXML
     void initialize() {
-        assert comboAudioOutput != null : "fx:id=\"comboAudioOutput\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
-        assert labelPlayerName != null : "fx:id=\"labelPlayerName\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
-        assert labelPlayerTime != null : "fx:id=\"labelPlayerTime\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
-        assert sliderMasterVolume != null : "fx:id=\"sliderMasterVolume\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
-        assert sliderPlayerTime != null : "fx:id=\"sliderPlayerTime\" was not injected: check your FXML file 'MyMusicPlayer.fxml'.";
+        assert comboAudioOutput != null : "fx:id=\"comboAudioOutput\" was not injected: check your FXML file 'MyAudioPlayer.fxml'.";
+        assert labelPlayerName != null : "fx:id=\"labelPlayerName\" was not injected: check your FXML file 'MyAudioPlayer.fxml'.";
+        assert labelPlayerTime != null : "fx:id=\"labelPlayerTime\" was not injected: check your FXML file 'MyAudioPlayer.fxml'.";
+        assert sliderMasterVolume != null : "fx:id=\"sliderMasterVolume\" was not injected: check your FXML file 'MyAudioPlayer.fxml'.";
+        assert sliderPlayerTime != null : "fx:id=\"sliderPlayerTime\" was not injected: check your FXML file 'MyAudioPlayer.fxml'.";
 
         myAudioPlayer = new MyMediaPlayer(bean);
 //        myAudioPlayer = new MyClip(bean);

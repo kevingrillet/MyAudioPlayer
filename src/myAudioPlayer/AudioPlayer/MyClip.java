@@ -1,7 +1,7 @@
-package myMusicPlayer.AudioPlayer;
+package myAudioPlayer.AudioPlayer;
 
 import javafx.scene.media.Media;
-import myMusicPlayer.Bean;
+import myAudioPlayer.Bean;
 
 import javax.sound.sampled.*;
 import java.io.File;

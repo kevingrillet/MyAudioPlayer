@@ -1,4 +1,4 @@
-package myMusicPlayer;
+package myAudioPlayer;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -20,7 +20,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage myMusicPlayer) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("MyMusicPlayer.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("MyAudioPlayer.fxml"));
         myMusicPlayer.setTitle("MyMP3Player");
         myMusicPlayer.setScene(new Scene(root/*, 300, 275*/));
         myMusicPlayer.show();

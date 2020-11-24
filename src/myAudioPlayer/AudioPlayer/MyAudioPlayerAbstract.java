@@ -1,8 +1,8 @@
-package myMusicPlayer.AudioPlayer;
+package myAudioPlayer.AudioPlayer;
 
 import javafx.collections.FXCollections;
-import myMusicPlayer.Bean;
-import myMusicPlayer.Utils.UtilsProperties;
+import myAudioPlayer.Bean;
+import myAudioPlayer.Utils.UtilsProperties;
 
 import java.util.Collection;
 import java.util.List;

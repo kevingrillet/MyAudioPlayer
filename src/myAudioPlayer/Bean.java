@@ -1,4 +1,4 @@
-package myMusicPlayer;
+package myAudioPlayer;
 
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;

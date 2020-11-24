@@ -1,4 +1,4 @@
-package myMusicPlayer.AudioPlayer;
+package myAudioPlayer.AudioPlayer;
 
 import javax.sound.sampled.Mixer;
 import java.util.Collection;

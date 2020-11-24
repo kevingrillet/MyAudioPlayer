@@ -1,6 +1,6 @@
-package myMusicPlayer;
+package myAudioPlayer;
 
-import myMusicPlayer.Utils.UtilsProperties;
+import myAudioPlayer.Utils.UtilsProperties;
 
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Mixer;

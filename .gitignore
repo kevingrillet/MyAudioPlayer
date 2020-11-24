@@ -31,4 +31,4 @@ out/
 *.iws
 
 # Project
-/src/myMusicPlayer/Resources/config.properties
+/src/myAudioPlayer/Resources/config.properties

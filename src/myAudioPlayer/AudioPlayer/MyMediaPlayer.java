@@ -1,11 +1,11 @@
-package myMusicPlayer.AudioPlayer;
+package myAudioPlayer.AudioPlayer;
 
 import javafx.collections.MapChangeListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
-import myMusicPlayer.Bean;
-import myMusicPlayer.Utils.UtilsProperties;
+import myAudioPlayer.Bean;
+import myAudioPlayer.Utils.UtilsProperties;
 
 import javax.sound.sampled.Mixer;
 import java.io.File;
