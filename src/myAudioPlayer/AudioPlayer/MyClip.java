@@ -3,6 +3,7 @@ package myAudioPlayer.AudioPlayer;
 import javafx.scene.media.Media;
 import myAudioPlayer.Bean;
 
+import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -30,9 +31,7 @@ public class MyClip extends MyAudioPlayerAbstract {
             e.printStackTrace();
         }
 
-        bean.timeProperty().addListener(t -> {
-            seek(bean.getTime());
-        });
+        bean.timeProperty().addListener(t -> seek(bean.getTime()));
     }
 
     /**
@@ -44,11 +43,11 @@ public class MyClip extends MyAudioPlayerAbstract {
 
 
     @Override
-    public void setAudioOutput(Mixer.Info mixerInfo) {
+    public void setAudioOutput(Mixer.Info audioOutput) {
         pause();
         Clip tmp = clip;
         try {
-            clip = AudioSystem.getClip(mixerInfo);
+            clip = AudioSystem.getClip(audioOutput);
             if (status != Status.UNKNOWN) {
                 clip.open(AudioSystem.getAudioInputStream(currentMusic));
             }
@@ -132,12 +131,15 @@ public class MyClip extends MyAudioPlayerAbstract {
             stop();
             try {
 
-                currentMusic = new File(bean.getQueue().remove(0));
+                currentMusic = new File(bean.getQueue().get(1));
                 clip.close();
                 clip.open(AudioSystem.getAudioInputStream(currentMusic));
             } catch (Exception e) {
+                currentMusic = null;
+                clip.close();
                 System.out.println(e.getMessage());
             }
+            bean.getQueue().remove(0);
             play();
         }
     }
@@ -210,7 +212,7 @@ public class MyClip extends MyAudioPlayerAbstract {
 
         } catch (Exception e) {
             System.out.println(e.getMessage());
-            return 0l;
+            return 0L;
         }
 
     }
