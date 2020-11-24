@@ -19,7 +19,7 @@ public class MyProperties {
     private final static String PATH_TO_MUSIC = "pathToMusic";
 
     private final static String configFile = "config.properties";
-    private final static String pathToConfig = "src/myMusicPlayer/Resources";
+    private final static String pathToConfig = "src/myAudioPlayer/Resources";
 
     private final static String defaultAudioOutput = "";
     private final static String defaultFormats = "*.mp3, *.wav";
