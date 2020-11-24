@@ -1,4 +1,4 @@
-# MyMusicPlayer
+# MyAudioPlayer
  Test implementation of two java audio players.
  
 ## Two different audio players
