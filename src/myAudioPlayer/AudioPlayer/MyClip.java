@@ -181,17 +181,10 @@ public class MyClip extends MyAudioPlayerAbstract {
     @Override
     public void setVolume(double volume) {
         assert (volume >= 0 && volume <= 1);
-        /*if (clip.isOpen()) {
-            //FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
-            //gainControl.setValue((float) volume);
-        }*/
-        // TODO possible?
-//        if (clip.isOpen()) {
-//            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
-//            float range = gainControl.getMaximum() - gainControl.getMinimum();
-//            float gain = ((range * (float) volume) + gainControl.getMinimum());
-//            gainControl.setValue(gain);
-//        }
+        if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)){
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            gainControl.setValue((float) (Math.log10(volume) * 20));
+        }
     }
 
     /**
