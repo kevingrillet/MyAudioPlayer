@@ -5,25 +5,18 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 import myAudioPlayer.Bean;
-import myAudioPlayer.Utils.UtilsProperties;
 
 import javax.sound.sampled.Mixer;
 import java.io.File;
-import java.util.List;
 
 public class MyMediaPlayer extends MyAudioPlayerAbstract {
-    private final static String formats = "*.aif, *.aiff, *.aifc, *.m4a, *.wav, *.WAV";
     private MediaPlayer mediaPlayer;
 
     public MyMediaPlayer(Bean bean) {
         super(bean);
+        super.formats = "*.aif, *.aiff, *.aifc, *.m4a, *.wav, *.WAV";
         // WIP: LAG MACHINE
         bean.timeProperty().addListener(e -> seek(bean.getTime()));
-    }
-
-    @Override
-    public List<String> getFormats() {
-        return UtilsProperties.readFormats(formats);
     }
 
     @Override

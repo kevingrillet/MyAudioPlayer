@@ -14,6 +14,7 @@ import java.util.Map;
  */
 public class MyProperties {
     private final static String AUDIO_OUTPUT = "audioOutput";
+    private final static String AUDIO_PLAYER = "audioPlayer";
     private final static String FORMATS = "formats";
     private final static String MASTER_VOLUME = "masterVolume";
     private final static String PATH_TO_MUSIC = "pathToMusic";
@@ -22,12 +23,14 @@ public class MyProperties {
     private final static String pathToConfig = "src/myAudioPlayer/Resources";
 
     private final static String defaultAudioOutput = "";
+    private final static String defaultAudioPlayer = "MediaPlayer";
     private final static String defaultFormats = "*.mp3, *.wav";
     private final static String defaultMasterVolume = "100.0";
     private final static String defaultPathToMusic = "";
 
     private Map<String, String> map;
     private Mixer.Info audioOutput;
+    private String audioPlayer;
     private boolean autoSave;
     private List<String> formats;
     private double masterVolume;
@@ -60,6 +63,7 @@ public class MyProperties {
                 }
             }
         }
+        setAudioPlayer(map.getOrDefault(AUDIO_PLAYER, defaultAudioPlayer));
         setFormats(UtilsProperties.readFormats(map.getOrDefault(FORMATS, defaultFormats)));
         setMasterVolume(Double.parseDouble(map.getOrDefault(MASTER_VOLUME, defaultMasterVolume)));
         setPathToMusic(Paths.get(map.getOrDefault(PATH_TO_MUSIC, defaultPathToMusic)));
@@ -101,6 +105,17 @@ public class MyProperties {
     public void setAutoSave(boolean autoSave) {
         if (this.autoSave == autoSave) return;
         this.autoSave = autoSave;
+        if (autoSave) save();
+    }
+
+    public String getAudioPlayer() {
+        return audioPlayer;
+    }
+
+    public void setAudioPlayer(String audioPlayer) {
+        if (this.audioPlayer.equals(audioPlayer)) return;
+        this.audioPlayer = audioPlayer;
+        setInMap(AUDIO_PLAYER, audioPlayer);
         if (autoSave) save();
     }
 

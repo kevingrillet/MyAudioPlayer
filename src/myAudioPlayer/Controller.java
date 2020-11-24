@@ -12,6 +12,7 @@ import javafx.scene.control.Slider;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 import myAudioPlayer.AudioPlayer.MyAudioPlayerInterface;
+import myAudioPlayer.AudioPlayer.MyClip;
 import myAudioPlayer.AudioPlayer.MyMediaPlayer;
 import myAudioPlayer.Utils.UtilsDateTime;
 
@@ -139,8 +140,15 @@ public class Controller {
         assert sliderMasterVolume != null : "fx:id=\"sliderMasterVolume\" was not injected: check your FXML file 'MyAudioPlayer.fxml'.";
         assert sliderPlayerTime != null : "fx:id=\"sliderPlayerTime\" was not injected: check your FXML file 'MyAudioPlayer.fxml'.";
 
-        myAudioPlayer = new MyMediaPlayer(bean);
-//        myAudioPlayer = new MyClip(bean);
+        /*______ LOAD PROPERTIES _____*/
+        myProperties = new MyProperties();
+        /*______ LOAD PROPERTIES _____*/
+
+        if (myProperties.getAudioPlayer().equals("MediaPlayer")) {
+            myAudioPlayer = new MyMediaPlayer(bean);
+        } else {
+            myAudioPlayer = new MyClip(bean);
+        }
 
         /*______ AUDIO OUTPUT ______*/
         // How to get list of AudioOutput.
@@ -183,12 +191,11 @@ public class Controller {
         bean.queueProperty().addListener((observableValue, strings, t1) -> Objects.requireNonNull(listViewPlaylist).setItems(bean.getQueue()));
         /*______ PLAYLIST ______*/
 
-        /*______ LOAD PROPERTIES _____*/
-        myProperties = new MyProperties();
+        /*______ SET PROPERTIES VALUES _____*/
         sliderMasterVolume.setValue((myProperties.getMasterVolume()));
         comboAudioOutput.getSelectionModel().select(AudioSystem.getMixer(myProperties.getAudioOutput()).getMixerInfo().getName());
         myProperties.setAutoSave(true);
-        /*______ LOAD PROPERTIES _____*/
+        /*______ SET PROPERTIES VALUES _____*/
     }
 
     /**
