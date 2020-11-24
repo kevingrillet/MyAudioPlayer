@@ -202,6 +202,7 @@ public class MyClip extends MyAudioPlayerAbstract {
     @Override
     public void setVolume(double volume) {
         assert (volume >= 0 && volume <= 1);
+        // TODO possible?
 //        if (clip.isOpen()) {
 //            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
 //            float range = gainControl.getMaximum() - gainControl.getMinimum();
