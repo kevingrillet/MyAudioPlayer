@@ -62,53 +62,17 @@ public class Controller {
     void handleButtonAction(ActionEvent event) {
         String id = ((Node) event.getSource()).getId();
         switch (id) {
-            case "buttonPlayerStop":
-                myAudioPlayer.stop();
-                break;
-            case "buttonPlayerPause":
-                myAudioPlayer.pause();
-                break;
-            case "buttonPlayerPlay":
+            case "buttonPlayerStop" -> myAudioPlayer.stop();
+            case "buttonPlayerPause" -> myAudioPlayer.pause();
+            case "buttonPlayerPlay" -> {
                 myAudioPlayer.setVolume(sliderMasterVolume.getValue() / 100.0);
                 myAudioPlayer.play();
-                break;
-            case "buttonPlayerNext":
-                myAudioPlayer.next();
-                break;
-            case "buttonPlayerPrevious":
-                myAudioPlayer.previous();
-                break;
-            case "buttonPlaylistAdd":
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Audio Files", myProperties.getFormats()));
-                fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Audio Player", myAudioPlayer.getFormats()));
-                if (!myProperties.getPathToMusic().toString().isEmpty()) {
-                    fileChooser.setInitialDirectory(new File(myProperties.getPathToMusic().toString()));
-                }
-                List<File> fileList = fileChooser.showOpenMultipleDialog(null);
-                if (fileList != null) {
-                    for (File file : fileList) {
-                        if (file != null) {
-                            myAudioPlayer.add(file.toString());
-                            myProperties.setPathToMusic(Paths.get(file.toURI()).getParent());
-                        }
-                    }
-                    myAudioPlayer.setMedia();
-                }
-                break;
-            case "buttonPlaylistRemove":
-                if (listViewPlaylist.getSelectionModel().getSelectedIndex() >= 0) {
-                    myAudioPlayer.remove(listViewPlaylist.getSelectionModel().getSelectedIndex());
-                    if (listViewPlaylist.getSelectionModel().getSelectedIndex() == 0) {
-                        myAudioPlayer.stop();
-                        if (listViewPlaylist.getItems().size() > 1) {
-                            myAudioPlayer.setMedia();
-                        }
-                    }
-                }
-                break;
-            default:
-                throw new IllegalStateException("Unexpected value: " + id);
+            }
+            case "buttonPlayerNext" -> myAudioPlayer.next();
+            case "buttonPlayerPrevious" -> myAudioPlayer.previous();
+            case "buttonPlaylistAdd" -> add();
+            case "buttonPlaylistRemove" -> remove();
+            default -> throw new IllegalStateException("Unexpected value: " + id);
         }
     }
 
@@ -133,8 +97,21 @@ public class Controller {
 
     @FXML
     void handleOnKeyPressed(KeyEvent event) {
-        if (event.getCode() == KeyCode.P && event.isControlDown()) {
+        if (event.getCode() == KeyCode.P && event.isControlDown() && event.isShiftDown()) {
+            myAudioPlayer.pause();
+        } else if (event.getCode() == KeyCode.P && event.isControlDown()) {
+            myAudioPlayer.setVolume(sliderMasterVolume.getValue() / 100.0);
             myAudioPlayer.play();
+        } else if (event.getCode() == KeyCode.S && event.isControlDown()) {
+            myAudioPlayer.stop();
+        } else if (event.getCode() == KeyCode.RIGHT && event.isControlDown()) {
+            myAudioPlayer.next();
+        } else if (event.getCode() == KeyCode.LEFT && event.isControlDown()) {
+            myAudioPlayer.previous();
+        } else if (event.getCode() == KeyCode.PLUS && event.isControlDown()) {
+            add();
+        } else if (event.getCode() == KeyCode.MINUS && event.isControlDown()) {
+            remove();
         }
     }
 
@@ -222,5 +199,40 @@ public class Controller {
         }
     }
 
+    /**
+     * Add to playlist
+     */
+    private void add() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Audio Files", myProperties.getFormats()));
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Audio Player", myAudioPlayer.getFormats()));
+        if (!myProperties.getPathToMusic().toString().isEmpty()) {
+            fileChooser.setInitialDirectory(new File(myProperties.getPathToMusic().toString()));
+        }
+        List<File> fileList = fileChooser.showOpenMultipleDialog(null);
+        if (fileList != null) {
+            for (File file : fileList) {
+                if (file != null) {
+                    myAudioPlayer.add(file.toString());
+                    myProperties.setPathToMusic(Paths.get(file.toURI()).getParent());
+                }
+            }
+            myAudioPlayer.setMedia();
+        }
+    }
 
+    /**
+     * Remove selected line
+     */
+    private void remove() {
+        if (listViewPlaylist.getSelectionModel().getSelectedIndex() >= 0) {
+            myAudioPlayer.remove(listViewPlaylist.getSelectionModel().getSelectedIndex());
+            if (listViewPlaylist.getSelectionModel().getSelectedIndex() == 0) {
+                myAudioPlayer.stop();
+                if (listViewPlaylist.getItems().size() > 1) {
+                    myAudioPlayer.setMedia();
+                }
+            }
+        }
+    }
 }
