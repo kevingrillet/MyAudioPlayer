@@ -1,5 +1,7 @@
 # MyAudioPlayer
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Java SE Development Kit 11 Downloads](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)](https://img.shields.io/badge/java-v11-red?logo=java)
+[![JavaFX](https://gluonhq.com/products/javafx/)](https://img.shields.io/badge/javafx-v1-red0)
 
 
  Test implementation of two java audio players.
@@ -9,10 +11,10 @@
 | | [javafx.scene.media.MediaPlayer](https://docs.oracle.com/javafx/2/api/javafx/scene/media/MediaPlayer.html) | [javax.sound.sampled.Clip](https://docs.oracle.com/javase/7/docs/api/javax/sound/sampled/Clip.html) |
 | ------ | ------ | ------ |
 | Audio formats | :warning: .aif, .aiff, .aifc, .m4a, **.mp3**, .wav, .WAV | :warning: .aif, .aiff, .aifc, .m4a, .wav, .WAV |
-| Volume | :heavy_check_mark: `void setVolume(double value)` | :x: |
+| Volume | :heavy_check_mark: `void setVolume(double value)` | :warning: `((FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN)).setValue(float newValue)` [^(1)](https://docs.oracle.com/javase/7/docs/api/javax/sound/sampled/FloatControl.html) [(^(2)](https://github.com/jenis23/Super-Mario-Bros/blob/master/jig-engine-1.7/src/jig/engine/audio/jsound/ClipPlayback.java)|
 | Get time | :heavy_check_mark: `Duration getCurrentTime()` | :heavy_check_mark: `long getMicrosecondPosition()` |
-| Seek | :heavy_check_mark: `void	seek(Duration seekTime)` | :heavy_check_mark: `void setMicrosecondPosition(long microseconds)` [*](https://docs.oracle.com/javase/7/docs/api/javax/sound/sampled/DataLine.html) |
-| Audio mixer | :x: *Windows default output* | :heavy_check_mark: `static Clip getClip(Mixer.Info mixerInfo)` [*](https://docs.oracle.com/javase/7/docs/api/javax/sound/sampled/AudioSystem.html) |
+| Seek | :heavy_check_mark: `void	seek(Duration seekTime)` | :heavy_check_mark: `void setMicrosecondPosition(long microseconds)` [^(1)](https://docs.oracle.com/javase/7/docs/api/javax/sound/sampled/DataLine.html) |
+| Audio mixer | :x: *Windows default output* | :heavy_check_mark: `static Clip getClip(Mixer.Info mixerInfo)` [^(1)](https://docs.oracle.com/javase/7/docs/api/javax/sound/sampled/AudioSystem.html) |
 | Change media | :warning: *Create a new MediaPlayer* | :heavy_check_mark: `void open(AudioInputStream stream)` |
 | Property | :heavy_check_mark: `currentTimeProperty, ...` | :x: |
 | Event | :heavy_check_mark: `setOnReady, setOnEndOfMedia, ...` | :x: |
@@ -29,5 +31,4 @@ Follow the JavaFX help: <https://www.jetbrains.com/help/idea/javafx.html>
 Set VM options : `--module-path %PATH_TO_FX% --add-modules javafx.controls,javafx.media,javafx.fxml`
 
 ## ToDo
-- [ ] Volume in `AudioPLayer/MyCLip`
-- [ ] Fix the lag machine in `AudioPlayer/MyMediaPlayer`
+- [ ] Fix the lag machine
