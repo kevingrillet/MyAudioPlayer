@@ -11,7 +11,7 @@
 | | [javafx.scene.media.MediaPlayer](https://docs.oracle.com/javafx/2/api/javafx/scene/media/MediaPlayer.html) | [javax.sound.sampled.Clip](https://docs.oracle.com/javase/7/docs/api/javax/sound/sampled/Clip.html) |
 | ------ | ------ | ------ |
 | Audio formats | :warning: .aif, .aiff, .aifc, .m4a, **.mp3**, .wav, .WAV | :warning: .aif, .aiff, .aifc, .m4a, .wav, .WAV |
-| Volume | :heavy_check_mark: `void setVolume(double value)` | :warning: `((FloatControl)clip.getControl(FloatControl.Type.MASTER_GAIN)).setValue(float newValue)` [:books:](https://docs.oracle.com/javase/7/docs/api/javax/sound/sampled/FloatControl.html) [:bookmark:](https://github.com/jenis23/Super-Mario-Bros/blob/master/jig-engine-1.7/src/jig/engine/audio/jsound/ClipPlayback.java)|
+| Volume | :heavy_check_mark: `void setVolume(double value)` | :warning: `((FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN)).setValue(float newValue)` [:books:](https://docs.oracle.com/javase/7/docs/api/javax/sound/sampled/FloatControl.html) [:bookmark:](https://github.com/jenis23/Super-Mario-Bros/blob/master/jig-engine-1.7/src/jig/engine/audio/jsound/ClipPlayback.java)|
 | Get time | :heavy_check_mark: `Duration getCurrentTime()` | :heavy_check_mark: `long getMicrosecondPosition()` |
 | Seek | :heavy_check_mark: `void	seek(Duration seekTime)` | :heavy_check_mark: `void setMicrosecondPosition(long microseconds)` [:books:](https://docs.oracle.com/javase/7/docs/api/javax/sound/sampled/DataLine.html) |
 | Audio mixer | :x: *Windows default output* | :heavy_check_mark: `static Clip getClip(Mixer.Info mixerInfo)` [:books:](https://docs.oracle.com/javase/7/docs/api/javax/sound/sampled/AudioSystem.html) |
