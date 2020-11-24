@@ -107,6 +107,7 @@ public class MyClip extends MyAudioPlayerAbstract {
             pauseTime = clip.getMicrosecondPosition();
             clip.stop();
             status = Status.PAUSED;
+            bean.setTime(getTime());
         }
     }
 
@@ -130,7 +131,6 @@ public class MyClip extends MyAudioPlayerAbstract {
         } else {
             stop();
             try {
-
                 currentMusic = new File(bean.getQueue().get(1));
                 clip.close();
                 clip.open(AudioSystem.getAudioInputStream(currentMusic));

@@ -113,7 +113,7 @@ public class MyProperties {
     }
 
     public void setAudioPlayer(String audioPlayer) {
-        if (this.audioPlayer.equals(audioPlayer)) return;
+        if (this.audioPlayer != null && this.audioPlayer.equals(audioPlayer)) return;
         this.audioPlayer = audioPlayer;
         setInMap(AUDIO_PLAYER, audioPlayer);
         if (autoSave) save();
@@ -126,7 +126,7 @@ public class MyProperties {
     public void setFormats(List<String> formats) {
         if (this.formats == formats) return;
         this.formats = formats;
-        setInMap(FORMATS, formats.stream().reduce((acc, n) -> (acc + "," + n)).get());
+        setInMap(FORMATS, formats.stream().reduce((acc, n) -> (acc + "," + n)).orElse(""));
         if (autoSave) save();
     }
 
