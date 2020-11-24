@@ -182,8 +182,7 @@ public class MyClip extends MyAudioPlayerAbstract {
     public void setVolume(double volume) {
         assert (volume >= 0 && volume <= 1);
         if (clip.isControlSupported(FloatControl.Type.MASTER_GAIN)){
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-            gainControl.setValue((float) (Math.log10(volume) * 20));
+            ((FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN)).setValue((float) (Math.log10(volume*2) * 20));
         }
     }
 
