@@ -3,7 +3,6 @@ package myAudioPlayer.AudioPlayer;
 import javafx.scene.media.Media;
 import myAudioPlayer.Bean;
 
-import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -32,7 +31,6 @@ public class MyClip extends MyAudioPlayerAbstract {
         }
 
         bean.timeProperty().addListener(t -> {
-            System.out.println(getTime());
             seek(bean.getTime());
         });
     }
@@ -44,27 +42,6 @@ public class MyClip extends MyAudioPlayerAbstract {
         this(AudioSystem.getMixer(null).getMixerInfo(), bean);
     }
 
-    /**
-     * Get the duration of the media from the file
-     *
-     * @param file (File):audio file
-     * @return (long): duration of the file
-     */
-    private static long getDurationFile(File file) {
-        try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
-            AudioFormat format = audioInputStream.getFormat();
-            long audioFileLength = file.length();
-            int frameSize = format.getFrameSize();
-            float frameRate = format.getFrameRate();
-            float durationInSeconds = (audioFileLength / (frameSize * frameRate));
-            return (long) durationInSeconds * 1000;
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return 0L;
-        }
-    }
 
     @Override
     public void setAudioOutput(Mixer.Info mixerInfo) {
@@ -202,6 +179,10 @@ public class MyClip extends MyAudioPlayerAbstract {
     @Override
     public void setVolume(double volume) {
         assert (volume >= 0 && volume <= 1);
+        /*if (clip.isOpen()) {
+            //FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
+            //gainControl.setValue((float) volume);
+        }*/
         // TODO possible?
 //        if (clip.isOpen()) {
 //            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.VOLUME);
@@ -209,6 +190,29 @@ public class MyClip extends MyAudioPlayerAbstract {
 //            float gain = ((range * (float) volume) + gainControl.getMinimum());
 //            gainControl.setValue(gain);
 //        }
+    }
+
+    /**
+     * Get the duration of the media from the file
+     *
+     * @param file (File):audio file
+     * @return (long): duration of the file
+     */
+    private static long getDurationFile(File file) {
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(file);
+            AudioFormat format = audioInputStream.getFormat();
+            long audioFileLength = file.length();
+            int frameSize = format.getFrameSize();
+            float frameRate = format.getFrameRate();
+            float durationInSeconds = (audioFileLength / (frameSize * frameRate));
+            return (long) durationInSeconds * 1000;
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return 0l;
+        }
+
     }
 
     enum Status {
