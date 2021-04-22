@@ -2,6 +2,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Java Development Kit, version 15](https://img.shields.io/badge/Java-JDK15.0.1-red?logo=java)](https://jdk.java.net/15/)
 [![JavaFX](https://img.shields.io/badge/JavaFX-15-red)](https://gluonhq.com/products/javafx/)
+[![NOT WORKING](https://img.shields.io/badge/Status-BREAK-red?logo=Github)](https://github.com/kevingrillet/MyAudioPlayer#todo)
 
 
  Test implementation of two java audio players.
